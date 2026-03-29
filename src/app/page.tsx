@@ -1,62 +1,99 @@
 import ProductCard from '@/components/ProductCard';
 import { products } from '@/data/products';
+import { Layers, Activity, ShieldCheck, Zap } from 'lucide-react';
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-[#000000] text-white font-sans selection:bg-primary selection:text-black">
+    <main className="min-h-screen bg-[#000000] text-white font-sans selection:bg-primary selection:text-black pb-24 md:pb-0">
       {/* Hero Section - Kinetic HUD Header */}
-      <section className="relative pt-48 pb-32 px-6 md:px-12 flex flex-col items-center overflow-hidden border-b border-white/5">
-        {/* Large Decorative HUD Crosshair Elements */}
+      <section className="relative pt-32 md:pt-64 pb-24 px-6 md:px-12 flex flex-col items-center overflow-hidden border-b border-white/5">
+        {/* Large Decorative HUD Elements */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-screen h-screen opacity-10 pointer-events-none stroke-primary/30">
           <svg width="100%" height="100%" viewBox="0 0 100 100" fill="none">
             <circle cx="50" cy="50" r="40" stroke="currentColor" strokeWidth="0.1" strokeDasharray="1 3" />
-            <path d="M50 0 V100 M0 50 H100" stroke="currentColor" strokeWidth="0.05" />
           </svg>
         </div>
 
-        <div className="relative z-10 flex flex-col gap-8 max-w-7xl w-full">
-          <div className="flex flex-col md:flex-row items-baseline gap-6 justify-center text-center md:text-left">
-            <h1 className="text-6xl md:text-[14rem] font-display font-black leading-[0.85] uppercase tracking-[-0.06em] text-white italic skew-x-[-10deg]">
-              PURE <span className="text-primary drop-shadow-[0_0_30px_rgba(211,148,255,0.4)]">DIGITAL</span>
-            </h1>
-            <div className="flex items-center gap-4 text-[10px] md:text-xs font-display font-bold tracking-[0.6em] uppercase text-secondary/60">
-              <div className="pulse-cyan"></div>
-              [ SYSTEM_ACTIVE ]
-            </div>
+        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 max-w-7xl w-full">
+          {/* Main Title Area */}
+          <div className="lg:col-span-8 flex flex-col gap-6 md:gap-12">
+             <div className="flex flex-col md:flex-row items-baseline gap-6 text-center md:text-left">
+                <h1 className="text-6xl md:text-[14rem] font-display font-black leading-[0.85] uppercase tracking-[-0.06em] text-white italic skew-x-[-10deg]">
+                  PURE <span className="text-primary drop-shadow-[0_0_30px_rgba(211,148,255,0.4)]">DIGITAL</span>
+                </h1>
+                <div className="flex items-center gap-4 text-[10px] md:text-xs font-display font-bold tracking-[0.6em] uppercase text-secondary/60">
+                  <div className="pulse-cyan"></div>
+                  [ LIVE_PRINT_SYNC ]
+                </div>
+              </div>
+              
+              <div className="flex flex-col md:flex-row justify-between items-center md:items-end gap-12 mt-4 md:-mt-24">
+                <div className="max-w-xs text-secondary/40 text-[9px] md:text-[10px] font-display font-bold leading-relaxed uppercase tracking-widest border-l border-secondary/20 pl-8 order-2 md:order-1 hidden lg:block">
+                  Access the world's most advanced 3D fabrication marketplace. Precision engineered blueprints for creators who redefine reality.
+                </div>
+                <h2 className="text-6xl md:text-[14rem] font-display font-black leading-[0.85] uppercase tracking-[-0.06em] text-white italic skew-x-[-10deg] order-1 md:order-2 self-end">
+                  LOVE <span className="text-secondary drop-shadow-[0_0_30px_rgba(0,227,253,0.4)]">3D</span>
+                </h2>
+              </div>
+              
+              <div className="flex gap-4 mt-8 justify-center md:justify-start">
+                  <button className="btn-neon font-display font-black tracking-[0.2em] text-[10px] md:text-xs">Launch Studio</button>
+                  <button className="px-8 py-4 border border-white/20 hover:border-white transition-all font-display font-bold text-[10px] md:text-xs uppercase tracking-widest">View Showcase →</button>
+              </div>
           </div>
-          
-          <div className="flex flex-col md:flex-row justify-between items-center md:items-end gap-12 mt-8 md:-mt-24">
-            <div className="max-w-xs text-secondary/40 text-[9px] md:text-[10px] font-display font-bold leading-relaxed uppercase tracking-widest border-l border-secondary/20 pl-8 order-2 md:order-1">
-              Exploring the convergence of physical form and digital synthesis through architectural 3D objects.
-            </div>
-            <h2 className="text-6xl md:text-[14rem] font-display font-black leading-[0.85] uppercase tracking-[-0.06em] text-white italic skew-x-[-10deg] order-1 md:order-2 self-end">
-              LOVE <span className="text-secondary drop-shadow-[0_0_30px_rgba(0,227,253,0.4)]">3D</span>
-            </h2>
-          </div>
-        </div>
 
-        {/* HUD Data Trace Elements */}
-        <div className="absolute left-6 top-1/2 -translate-y-1/2 flex flex-col gap-32 hidden lg:flex">
-          {[1, 2, 3].map(i => (
-            <div key={i} className="flex flex-col gap-2">
-              <div className="w-1 h-32 bg-linear-to-b from-transparent via-primary/20 to-transparent"></div>
-              <div className="text-[8px] font-display text-primary/30 rotate-90 origin-left ml-2">DATA_STREAM_00{i}</div>
-            </div>
-          ))}
+          {/* Featured Material Card (Stitch: Obsidian Carbon) - Visible only on Desktop */}
+          <div className="lg:col-span-4 hidden lg:flex flex-col justify-end">
+             <div className="glass-card p-8 rounded-2xl relative overflow-hidden group">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 blur-3xl -z-10 group-hover:bg-primary/20 transition-all"></div>
+                
+                <div className="flex items-center gap-4 text-primary text-[10px] font-black uppercase tracking-widest mb-6">
+                   <div className="w-10 h-[1.5px] bg-primary"></div>
+                   Featured_Material
+                </div>
+                
+                <div className="flex items-start gap-4 mb-6">
+                   <div className="w-12 h-12 bg-white/5 rounded-lg flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                      <ShieldCheck size={24} />
+                   </div>
+                   <div>
+                      <h3 className="text-2xl font-display font-black tracking-tight uppercase leading-none mb-1">Obsididan Carbon</h3>
+                      <p className="text-[10px] text-white/40 font-bold uppercase tracking-widest">High-Tensile Strength</p>
+                   </div>
+                </div>
+                
+                <p className="text-[11px] text-white/60 font-medium leading-[1.6] uppercase tracking-wide mb-8">
+                   Industrial grade filament optimized for heavy-duty mechanical parts and aerodynamic housing.
+                </p>
+                
+                <button className="w-full py-4 border border-white/10 hover:border-primary hover:text-primary transition-all text-[9px] font-display font-black uppercase tracking-[0.4em]">
+                   Explore Materials
+                </button>
+             </div>
+          </div>
         </div>
 
         {/* Scroll Indicator - HUD Style */}
-        <div className="mt-48 flex flex-col items-center gap-6 relative group cursor-pointer animate-pulse">
+        <div className="mt-24 md:mt-48 flex flex-col items-center gap-6 relative group cursor-pointer animate-pulse">
            <div className="w-px h-24 bg-linear-to-b from-primary/60 to-transparent"></div>
            <span className="text-[8px] font-display font-bold tracking-[0.5em] text-primary/60 uppercase">Seek_Gallery</span>
         </div>
       </section>
 
       {/* Product List Section - Asymmetrical Kinetic Grid */}
-      <section id="produse" className="px-6 md:px-12 py-32 md:py-64 overflow-hidden relative">
+      <section id="produse" className="px-6 md:px-12 py-32 md:py-64 overflow-hidden relative border-b border-white/5">
         <div className="absolute inset-0 bg-radial-gradient from-primary/[0.02] to-transparent opacity-50"></div>
         
         <div className="max-w-7xl mx-auto flex flex-col gap-48 md:gap-96">
+           {/* Section Title as seen in Stitch */}
+           <div className="flex flex-col md:flex-row justify-between items-baseline mb-32 group">
+              <div>
+                 <h2 className="text-4xl md:text-8xl font-display font-black uppercase italic tracking-tighter">Trending Prototypes</h2>
+                 <p className="text-white/40 text-[10px] md:text-xs font-bold uppercase tracking-[0.3em] mt-4 ml-2">Top-rated blueprints from our global network.</p>
+              </div>
+              <button className="text-primary text-[11px] font-display font-black uppercase tracking-widest mt-8 md:mt-0 hover:tracking-[0.5em] transition-all">Browse All ::</button>
+           </div>
+
           {products.map((product, index) => (
             <ProductCard 
               key={product.id} 
@@ -67,47 +104,70 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Call to Action - Futuristic HUD */}
-      <section className="bg-surface-low relative py-48 md:py-64 px-6 md:px-12 flex flex-col items-center text-center overflow-hidden border-t border-white/5">
-        <div className="absolute inset-0 bg-linear-to-b from-primary/5 to-transparent"></div>
-        
-        <h2 className="text-5xl md:text-[12rem] font-display font-black leading-none uppercase tracking-tighter mb-16 italic skew-x-[-10deg]">
-          Start Your <br />
-          <span className="text-transparent stroke-primary stroke-2">Collection</span>
-        </h2>
-        
-        <a 
-          href="https://wa.me/40700000000" 
-          className="btn-neon group flex items-center gap-6 text-xl md:text-2xl font-display font-black"
-        >
-          SYNC_WHATSAPP
-          <span className="text-3xl md:text-4xl transition-transform duration-500 group-hover:translate-x-4">→</span>
-        </a>
+      {/* The Print Workshop - New Section as seen in Stitch */}
+      <section className="bg-surface-low relative py-32 md:py-64 px-6 md:px-12 overflow-hidden border-b border-white/5">
+         <div className="absolute top-0 right-0 w-1/2 h-full bg-linear-to-l from-primary/5 to-transparent pointer-events-none"></div>
+         
+         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-20 items-center">
+            <div className="lg:col-span-6 flex flex-col gap-10">
+               <h2 className="text-6xl md:text-9xl font-display font-black italic skew-x-[-10deg] leading-[0.9] uppercase">
+                  The <span className="text-secondary stroke-secondary stroke-1">Print</span> <br /> 
+                  Workshop
+               </h2>
+               
+               <p className="text-white/60 text-sm md:text-lg font-medium max-w-lg leading-relaxed uppercase tracking-wide">
+                  Don't have a printer? No problem. Send your selected blueprints to our certified global hubs and receive your parts within 48 hours.
+               </p>
+               
+               <div className="flex flex-col gap-6">
+                  {[
+                    "100+ Professional Materials",
+                    "Automated Quality Assurance",
+                    "Carbon Neutral Production"
+                  ].map((item, i) => (
+                    <div key={i} className="flex items-center gap-4 text-secondary text-[11px] font-display font-black uppercase tracking-widest">
+                       <div className="w-2 h-2 bg-secondary rounded-full"></div>
+                       {item}
+                    </div>
+                  ))}
+               </div>
+               
+               <button className="px-12 py-5 bg-white text-black font-display font-black text-xs uppercase tracking-[0.4em] self-start mt-8 hover:bg-secondary transition-colors">
+                  Find Local Hub
+               </button>
+            </div>
+            
+            {/* Visual Grid for Workshop */}
+            <div className="lg:col-span-6 grid grid-cols-2 gap-4">
+               {[1,2,3,4].map(i => (
+                 <div key={i} className={`aspect-square bg-surface rounded-2xl overflow-hidden glass-card group`}>
+                    <img 
+                      src={`https://images.unsplash.com/photo-${[
+                        '1581092160562-40aa08e78837',
+                        '1531297484001-80022131f5a1',
+                        '1635514562733-bd77da3b22cf',
+                        '1603732551658-5fabbafa84eb'
+                      ][i-1]}?q=80&w=800&auto=format&fit=crop`} 
+                      className="w-full h-full object-cover grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700 group-hover:scale-110"
+                      alt="3D Printing Workshop"
+                    />
+                 </div>
+               ))}
+            </div>
+         </div>
       </section>
 
-      {/* Footer - Minimal & HUD Aesthetic */}
-      <footer className="py-24 px-6 md:px-12 flex flex-col md:flex-row justify-between items-end gap-12 font-display font-bold uppercase text-[9px] tracking-[0.4em] text-secondary/30 relative overflow-hidden">
-        <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-secondary/10 to-transparent"></div>
-        
+      {/* Footer (Simplified as HUD) */}
+      <footer className="py-24 px-6 md:px-12 flex flex-col md:flex-row justify-between items-end gap-12 font-display font-bold uppercase text-[9px] tracking-[0.4em] text-secondary/30 relative">
         <div className="flex flex-col gap-4">
-          <div className="text-white text-2xl font-black mb-2 tracking-tighter italic">LOVE<span className="text-secondary opacity-100">3D</span>.</div>
+          <div className="text-white text-2xl font-black mb-2 tracking-tighter italic">LOVE<span className="text-secondary">3D</span>.</div>
           <p>© 2024 Kinetic Atelier LAB // PROD_VER_2.1</p>
-          <p>Coordinates: 44.4268° N, 26.1025° E [Bucharest, RO]</p>
         </div>
         
         <div className="flex gap-16">
-          <a href="#" className="hover:text-primary transition-colors flex items-center gap-2">
-            <div className="w-1 h-1 bg-primary rounded-full"></div>
-            Archive
-          </a>
-          <a href="#" className="hover:text-primary transition-colors flex items-center gap-2">
-            <div className="w-1 h-1 bg-primary rounded-full"></div>
-            Protocol
-          </a>
-          <a href="#" className="hover:text-primary transition-colors flex items-center gap-2">
-            <div className="w-1 h-1 bg-primary rounded-full"></div>
-            Privacy
-          </a>
+          <a href="#" className="hover:text-primary transition-colors">Archive</a>
+          <a href="#" className="hover:text-primary transition-colors">Protocol</a>
+          <a href="#" className="hover:text-primary transition-colors">Privacy</a>
         </div>
       </footer>
     </main>
