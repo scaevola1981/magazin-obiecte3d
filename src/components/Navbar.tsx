@@ -15,13 +15,13 @@ export default function Navbar() {
   }, []);
 
   return (
-    <nav className={`fixed top-0 left-0 w-full z-50 py-6 md:py-8 px-6 md:px-12 flex justify-between items-center transition-all duration-500 ${isScrolled ? 'bg-white/80 backdrop-blur-md py-4 md:py-6' : 'bg-transparent'}`}>
-      <Link href="/" className={`text-2xl font-black md:text-3xl tracking-tighter uppercase whitespace-nowrap transition-colors duration-500 ${isScrolled ? 'text-black' : 'text-black md:text-white md:mix-blend-difference'}`}>
+    <nav className={`fixed top-0 left-0 w-full z-[100] py-6 md:py-8 px-6 md:px-12 flex justify-between items-center transition-all duration-500 ${isScrolled ? 'bg-white/80 backdrop-blur-md py-4 md:py-6' : 'bg-transparent'}`}>
+      <Link href="/" className={`text-2xl font-black md:text-3xl tracking-tighter uppercase whitespace-nowrap transition-colors duration-500 text-black`}>
         LOVE3D
       </Link>
       
       <div className="flex items-center gap-6 md:gap-12 text-[10px] font-bold uppercase tracking-[0.4em]">
-        <Link href="#produse" className={`hover:opacity-50 transition-all duration-500 ${isScrolled ? 'text-black' : 'text-black md:text-white md:mix-blend-difference'}`}>
+        <Link href="#produse" className={`hover:opacity-50 transition-all duration-500 text-black`}>
           Gallery
         </Link>
         <Link 

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, memo } from 'react';
 
 interface ModelViewerProps {
   src: string;
@@ -9,7 +9,7 @@ interface ModelViewerProps {
   poster?: string;
 }
 
-export default function ModelViewer({ src, iosSrc, alt, poster }: ModelViewerProps) {
+const ModelViewer = memo(function ModelViewer({ src, iosSrc, alt, poster }: ModelViewerProps) {
   const viewerRef = useRef<any>(null);
 
   useEffect(() => {
@@ -43,4 +43,6 @@ export default function ModelViewer({ src, iosSrc, alt, poster }: ModelViewerPro
       </model-viewer>
     </div>
   );
-}
+});
+
+export default ModelViewer;
