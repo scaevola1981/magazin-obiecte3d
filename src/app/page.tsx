@@ -14,7 +14,7 @@ export default function Home() {
         <div className="relative z-10 flex flex-col gap-4 max-w-7xl w-full">
           <div className="flex flex-col md:flex-row items-baseline gap-4">
             <h1 className="text-7xl md:text-[12rem] font-display font-black leading-[0.8] uppercase tracking-[-0.04em]">
-              The <span className="text-[#F2F2F2] stroke-black stroke-2">Digital</span>
+              PURE <span className="text-[#F2F2F2] stroke-black stroke-2">DIGITAL</span>
             </h1>
             <span className="text-sm font-bold tracking-[0.4em] uppercase text-gray-400 rotate-90 md:rotate-0">
               [ EDITION_2024 ]
@@ -26,7 +26,7 @@ export default function Home() {
               Exploring the convergence of physical form and digital synthesis through architectural 3D objects.
             </p>
             <h2 className="text-7xl md:text-[12rem] font-display font-black leading-[0.8] uppercase tracking-[-0.04em]">
-              Artifacts
+              LOVE 3D
             </h2>
           </div>
         </div>
