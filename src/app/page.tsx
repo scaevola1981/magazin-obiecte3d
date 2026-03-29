@@ -67,7 +67,7 @@ export default function Home() {
       {/* Footer - Minimal & Geometric */}
       <footer className="py-12 px-6 md:px-12 flex flex-col md:flex-row justify-between items-end gap-12 font-bold uppercase text-[10px] tracking-[0.2em] text-gray-400">
         <div className="flex flex-col gap-2">
-          <div className="text-black text-xl mb-4">Magazin3D.</div>
+          <div className="text-black text-xl mb-4">LOVE3D.</div>
           <p>© 2024 Digital Artifacts LAB</p>
           <p>Bucharest, RO / Digital Space</p>
         </div>

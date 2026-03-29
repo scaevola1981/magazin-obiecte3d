@@ -16,7 +16,7 @@ const instrumentSans = Instrument_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Magazin 3D • Minimalist & Solid",
+  title: "LOVE3D • Digital Artifacts Lab",
   description: "Magazin online de obiecte 3D cu vizualizare interactivă și comandă directă pe WhatsApp.",
 };
 
