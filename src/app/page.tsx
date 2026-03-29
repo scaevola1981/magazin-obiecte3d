@@ -1,16 +1,13 @@
-import Navbar from '@/components/Navbar';
 import ProductCard from '@/components/ProductCard';
 import { products } from '@/data/products';
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-white text-black font-sans">
-      <Navbar />
-      
       {/* Hero Section - Asymmetrical & Bold */}
-      <section className="relative pt-48 pb-32 px-6 md:px-12 flex flex-col items-center overflow-hidden">
+      <section className="relative pt-48 pb-24 px-6 md:px-12 flex flex-col items-center overflow-hidden">
         {/* Large Background Letter */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[40vw] font-display font-black text-gray-100/50 pointer-events-none select-none z-0">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[50vw] md:text-[40vw] font-display font-black text-gray-100/50 pointer-events-none select-none z-0">
           3D
         </div>
 

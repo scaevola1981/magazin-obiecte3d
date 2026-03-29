@@ -29,7 +29,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
       className={`relative flex flex-col pt-12 md:pt-24 ${isEven ? 'md:pr-12' : 'md:pl-12'}`}
     >
       {/* Index Number */}
-      <span className="absolute top-0 left-0 text-[10px] font-bold tracking-[0.2em] uppercase text-gray-300">
+      <span className="absolute top-0 left-0 text-[9px] md:text-[10px] font-bold tracking-[0.2em] uppercase text-gray-300">
         [ Model_Ref: 00{product.id} ]
       </span>
 
@@ -42,30 +42,30 @@ export default function ProductCard({ product, index }: ProductCardProps) {
         />
         
         {/* Overlapping Price */}
-        <div className="absolute -bottom-6 -right-4 bg-black text-white px-6 py-3 font-display text-2xl tracking-tight z-20">
+        <div className="absolute -bottom-4 md:-bottom-6 -right-2 md:-right-4 bg-black text-white px-4 md:px-6 py-2 md:py-3 font-display text-xl md:text-2xl tracking-tight z-20">
           {product.price}
         </div>
       </div>
 
       {/* Product Info */}
-      <div className="mt-12 flex flex-col md:flex-row justify-between items-start gap-6 border-b border-black/10 pb-12">
+      <div className="mt-8 md:mt-12 flex flex-col md:flex-row justify-between items-start gap-6 border-b border-black/10 pb-8 md:pb-12">
         <div className="max-w-xs">
-          <h3 className="text-4xl md:text-5xl font-display font-bold leading-none mb-4 uppercase tracking-tighter">
+          <h3 className="text-3xl md:text-5xl font-display font-bold leading-none mb-3 md:mb-4 uppercase tracking-tighter">
             {product.name}
           </h3>
-          <p className="text-gray-500 text-sm font-medium leading-relaxed uppercase tracking-wider">
+          <p className="text-gray-500 text-[10px] md:text-sm font-medium leading-relaxed uppercase tracking-wider">
             {product.description}
           </p>
         </div>
         
         <button
           onClick={handleWhatsAppOrder}
-          className="group relative px-8 py-5 bg-black text-white text-[10px] font-bold uppercase tracking-[0.3em] overflow-hidden transition-all duration-300 hover:pr-12"
+          className="group relative w-full md:w-auto px-8 py-5 bg-black text-white text-[10px] font-bold uppercase tracking-[0.3em] overflow-hidden transition-all duration-300 active:scale-[0.98] md:hover:pr-12"
         >
           <span className="relative z-10 font-bold">Comandă Acum</span>
-          <span className="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all duration-300">→</span>
-          <div className="absolute inset-0 bg-white translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
-          <span className="absolute inset-0 flex items-center justify-center text-black opacity-0 group-hover:opacity-100 transition-opacity duration-300 font-bold">WhatsApp Order</span>
+          <span className="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 md:group-hover:opacity-100 transition-all duration-300">→</span>
+          <div className="absolute inset-0 bg-white translate-y-full md:group-hover:translate-y-0 transition-transform duration-300"></div>
+          <span className="absolute inset-0 flex items-center justify-center text-black opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 font-bold">WhatsApp Order</span>
         </button>
       </div>
     </motion.div>

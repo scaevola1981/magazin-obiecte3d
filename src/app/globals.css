@@ -16,10 +16,22 @@
   body {
     @apply bg-[var(--background)] text-[var(--foreground)] antialiased;
     font-feature-settings: "ss01", "ss02", "cv01", "cv02";
+    -webkit-tap-highlight-color: transparent;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1 {
+    @apply font-display tracking-tight leading-[0.85] uppercase;
+    font-size: clamp(3rem, 15vw, 12rem);
+  }
+
+  h2 {
     @apply font-display tracking-tight leading-[0.9] uppercase;
+    font-size: clamp(2.5rem, 10vw, 10rem);
+  }
+
+  h3 {
+    @apply font-display tracking-tight leading-[0.9] uppercase;
+    font-size: clamp(1.5rem, 6vw, 4rem);
   }
 }
 
@@ -66,6 +78,7 @@ model-viewer {
   --poster-color: transparent;
   width: 100%;
   height: 100%;
+  touch-action: pan-y; /* Allow vertical scroll even when swiping on model */
 }
 
 /* Smooth Scrolling */
