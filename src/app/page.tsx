@@ -6,8 +6,8 @@ export default function Home() {
     <main className="min-h-screen bg-white text-black font-sans">
       {/* Hero Section - Asymmetrical & Bold */}
       <section className="relative pt-48 pb-24 px-6 md:px-12 flex flex-col items-center overflow-hidden">
-        {/* Large Background Letter */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[50vw] md:text-[40vw] font-display font-black text-gray-100/50 pointer-events-none select-none z-0">
+        {/* Large Background Letter - Reduced on Mobile */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[80vw] md:text-[40vw] font-display font-black text-gray-100/30 md:text-gray-100/50 pointer-events-none select-none z-0 overflow-hidden leading-none">
           3D
         </div>
 
@@ -16,16 +16,13 @@ export default function Home() {
             <h1 className="text-7xl md:text-[12rem] font-display font-black leading-[0.8] uppercase tracking-[-0.04em]">
               PURE <span className="text-[#F2F2F2] stroke-black stroke-2">DIGITAL</span>
             </h1>
-            <span className="text-sm font-bold tracking-[0.4em] uppercase text-gray-400 rotate-90 md:rotate-0">
-              [ EDITION_2024 ]
-            </span>
           </div>
           
           <div className="flex flex-col md:flex-row justify-end items-end gap-12 mt-4 md:-mt-12">
-            <p className="max-w-md text-gray-500 text-lg font-medium leading-[1.4] uppercase tracking-wide text-right">
+            <p className="max-w-xs md:max-w-md text-gray-500 text-xs md:text-lg font-medium leading-relaxed uppercase tracking-wide text-center md:text-right">
               Exploring the convergence of physical form and digital synthesis through architectural 3D objects.
             </p>
-            <h2 className="text-7xl md:text-[12rem] font-display font-black leading-[0.8] uppercase tracking-[-0.04em]">
+            <h2 className="text-5xl sm:text-7xl md:text-[12rem] font-display font-black leading-[0.9] md:leading-[0.8] uppercase tracking-[-0.04em]">
               LOVE 3D
             </h2>
           </div>
