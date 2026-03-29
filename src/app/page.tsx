@@ -1,11 +1,72 @@
 import ProductCard from '@/components/ProductCard';
+import MobileProductCard from '@/components/MobileProductCard';
 import { products } from '@/data/products';
 import { Layers, Activity, ShieldCheck, Zap } from 'lucide-react';
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-[#000000] text-white font-sans selection:bg-primary selection:text-black pb-24 md:pb-0">
-      {/* Hero Section - Kinetic HUD Header */}
+      {/* Mobile layout */}
+      <section className="md:hidden px-4 pt-20 pb-28 flex flex-col gap-8 max-w-xl mx-auto">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-lg bg-linear-to-br from-primary to-secondary"></div>
+            <div className="text-lg font-display font-bold tracking-tight">Printly</div>
+          </div>
+          <div className="flex items-center gap-3 text-white/60 text-xs font-display uppercase tracking-[0.2em]">
+            <span>Recent Prints</span>
+            <span className="w-8 h-[1px] bg-white/20"></span>
+          </div>
+        </div>
+
+        <div className="relative rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
+          <img
+            src="https://images.unsplash.com/photo-1503389152951-9f343605f61e?q=80&w=1400&auto=format&fit=crop"
+            alt="Hero print"
+            className="w-full h-64 object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent"></div>
+          <div className="absolute inset-0 p-6 flex flex-col justify-end gap-3">
+            <div className="text-xs font-display uppercase tracking-[0.35em] text-secondary">Community Picks</div>
+            <h1 className="text-3xl font-display font-black leading-tight">Print Your Reality</h1>
+            <p className="text-sm text-white/70">
+              Modele curente validate de comunitate, gata de print sau personalizare.
+            </p>
+            <a
+              href={`https://wa.me/${process.env.NEXT_PUBLIC_WA_NUMBER || '40700000000'}?text=${encodeURIComponent('Salut! Aș vrea o ofertă pentru un print 3D personalizat.')}`}
+              className="inline-flex w-fit items-center gap-2 px-4 py-3 bg-primary text-black font-display font-bold uppercase tracking-[0.2em] rounded-xl"
+            >
+              Cere ofertă
+            </a>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar">
+          {['Toate', 'Arte', 'Tools', 'Spare Parts', 'Automotive', 'Cosplay'].map((tag) => (
+            <span
+              key={tag}
+              className="px-4 py-2 text-xs font-display uppercase tracking-[0.2em] rounded-full border border-white/10 bg-white/5 text-white/80 whitespace-nowrap"
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl font-display font-bold tracking-tight">Trending Models</h2>
+            <span className="text-xs text-secondary font-display uppercase tracking-[0.2em]">Browse All</span>
+          </div>
+          <div className="flex flex-col gap-5">
+            {products.map((product) => (
+              <MobileProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <div className="hidden md:block">
+      {/* Desktop layout */}
       <section className="relative pt-32 md:pt-64 pb-24 px-6 md:px-12 flex flex-col items-center overflow-hidden border-b border-white/5">
         {/* Large Decorative HUD Elements */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-screen h-screen opacity-10 pointer-events-none stroke-primary/30">
@@ -18,8 +79,8 @@ export default function Home() {
           {/* Main Title Area */}
           <div className="lg:col-span-8 flex flex-col gap-6 md:gap-12">
              <div className="flex flex-col md:flex-row items-baseline gap-6 text-center md:text-left">
-                <h1 className="text-6xl md:text-[14rem] font-display font-black leading-[0.85] uppercase tracking-[-0.06em] text-white italic skew-x-[-10deg]">
-                  PURE <span className="text-primary drop-shadow-[0_0_30px_rgba(211,148,255,0.4)]">DIGITAL</span>
+                <h1 className="text-6xl md:text-[10rem] font-display font-black leading-[0.85] uppercase tracking-[-0.06em] text-white">
+                  The <span className="text-primary drop-shadow-[0_0_30px_rgba(211,148,255,0.4)]">Kinetic</span>
                 </h1>
                 <div className="flex items-center gap-4 text-[10px] md:text-xs font-display font-bold tracking-[0.6em] uppercase text-secondary/60">
                   <div className="pulse-cyan"></div>
@@ -27,12 +88,12 @@ export default function Home() {
                 </div>
               </div>
               
-              <div className="flex flex-col md:flex-row justify-between items-center md:items-end gap-12 mt-4 md:-mt-24">
+              <div className="flex flex-col md:flex-row justify-between items-center md:items-end gap-12 mt-4 md:-mt-10">
                 <div className="max-w-xs text-secondary/40 text-[9px] md:text-[10px] font-display font-bold leading-relaxed uppercase tracking-widest border-l border-secondary/20 pl-8 order-2 md:order-1 hidden lg:block">
-                  Access the world's most advanced 3D fabrication marketplace. Precision engineered blueprints for creators who redefine reality.
+                  Marketplace de printare 3D cu modele pregătite de fabricat, materiale verificate și livrare rapidă.
                 </div>
-                <h2 className="text-6xl md:text-[14rem] font-display font-black leading-[0.85] uppercase tracking-[-0.06em] text-white italic skew-x-[-10deg] order-1 md:order-2 self-end">
-                  LOVE <span className="text-secondary drop-shadow-[0_0_30px_rgba(0,227,253,0.4)]">3D</span>
+                <h2 className="text-6xl md:text-[10rem] font-display font-black leading-[0.85] uppercase tracking-[-0.06em] text-white order-1 md:order-2 self-end">
+                  Atelier
                 </h2>
               </div>
               
@@ -160,8 +221,8 @@ export default function Home() {
       {/* Footer (Simplified as HUD) */}
       <footer className="py-24 px-6 md:px-12 flex flex-col md:flex-row justify-between items-end gap-12 font-display font-bold uppercase text-[9px] tracking-[0.4em] text-secondary/30 relative">
         <div className="flex flex-col gap-4">
-          <div className="text-white text-2xl font-black mb-2 tracking-tighter italic">LOVE<span className="text-secondary">3D</span>.</div>
-          <p>© 2024 Kinetic Atelier LAB // PROD_VER_2.1</p>
+          <div className="text-white text-2xl font-black mb-2 tracking-tighter italic">Print<span className="text-secondary">ly</span>.</div>
+          <p>© 2026 Printly Lab // PROD_VER_2.1</p>
         </div>
         
         <div className="flex gap-16">
@@ -170,6 +231,7 @@ export default function Home() {
           <a href="#" className="hover:text-primary transition-colors">Privacy</a>
         </div>
       </footer>
+      </div>
     </main>
   );
 }

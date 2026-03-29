@@ -15,8 +15,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "LOVE3D • Digital Lab",
-  description: "Futuristic 3D printing and digital artifacts marketplace.",
+  title: "Printly • Print 3D la comandă",
+  description: "Marketplace de printare 3D cu modele, materiale și comandă rapidă prin WhatsApp.",
 };
 
 export default function RootLayout({

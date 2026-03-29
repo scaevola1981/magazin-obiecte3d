@@ -21,9 +21,10 @@ export default function ProductCard({ product, index }: ProductCardProps) {
   const isEven = index % 2 === 0;
 
   const handleWhatsAppOrder = () => {
-    const message = `Buna ziua! Sunt interesat de produsul ${product.name} (${product.price}).`;
+    const message = `Buna ziua! Sunt interesat de produsul ${product.name} (${product.price}). Puteți confirma disponibilitatea și materialul recomandat?`;
     const encodedMessage = encodeURIComponent(message);
-    const whatsappUrl = `https://wa.me/40700000000?text=${encodedMessage}`;
+    const waNumber = process.env.NEXT_PUBLIC_WA_NUMBER || "40700000000";
+    const whatsappUrl = `https://wa.me/${waNumber}?text=${encodedMessage}`;
     window.open(whatsappUrl, '_blank');
   };
 

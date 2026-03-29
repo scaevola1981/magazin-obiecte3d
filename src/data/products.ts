@@ -7,29 +7,79 @@ export interface Product {
   description: string;
 }
 
+const placeholderGlb = "https://modelviewer.dev/shared-assets/models/Astronaut.glb";
+
 export const products: Product[] = [
   {
     id: "1",
-    name: "Scaun Modern 3D",
-    price: "450 RON",
-    modelUrl: "https://modelviewer.dev/shared-assets/models/Astronaut.glb", // Placeholder .glb
-    thumbnailUrl: "https://images.unsplash.com/photo-1592078615290-033ee584e277?q=80&w=500&auto=format&fit=crop",
-    description: "Design minimalist, perfect pentru orice interior contemporan.",
+    name: "Twist Lattice Planter",
+    price: "190 RON",
+    modelUrl: placeholderGlb,
+    thumbnailUrl: "/products/twist-planter.jpg",
+    description: "Ghiveci dublu, print FDM PLA terracotta + bază PETG negru, aerisire radială pentru drenaj.",
   },
   {
     id: "2",
-    name: "Lampa Minimalistă",
-    price: "280 RON",
-    modelUrl: "https://modelviewer.dev/shared-assets/models/Astronaut.glb",
-    thumbnailUrl: "https://images.unsplash.com/photo-1507473885765-e6ed457f7815?q=80&w=500&auto=format&fit=crop",
-    description: "O piesă de accent care combină utilitatea cu estetica pură.",
+    name: "Cat Stretch Planter",
+    price: "120 RON",
+    modelUrl: placeholderGlb,
+    thumbnailUrl: "/products/cat-planter.jpg",
+    description: "Suport suculente în formă de pisică, finisaj mat ivory; perfect pentru cadouri.",
   },
   {
     id: "3",
-    name: "Vază Geometrică",
+    name: "Spiral Column Planter",
+    price: "230 RON",
+    modelUrl: placeholderGlb,
+    thumbnailUrl: "/products/spiral-planter.jpg",
+    description: "Design arhitectural cu striații verticale, perete gros pentru stabilitate; PLA Pro.",
+  },
+  {
+    id: "4",
+    name: "Soft Rib Planter",
+    price: "160 RON",
+    modelUrl: placeholderGlb,
+    thumbnailUrl: "/products/ribbed-cream.jpg",
+    description: "Pattern elicoidal fin, culoare crem; include liner interior pentru udat controlat.",
+  },
+  {
+    id: "5",
+    name: "Highland Cow Pot",
+    price: "130 RON",
+    modelUrl: placeholderGlb,
+    thumbnailUrl: "/products/highland-cow.jpg",
+    description: "Cachepot figurativ, polișat manual după print; ideal pentru suculente mici.",
+  },
+  {
+    id: "6",
+    name: "Hydroponic Kitchen Kit",
+    price: "690 RON",
+    modelUrl: placeholderGlb,
+    thumbnailUrl: "/products/hydroponic-kit.jpg",
+    description: "Stație mini hidroponică imprimată 3D + LED, livrată cu bureți de germinare.",
+  },
+  {
+    id: "7",
+    name: "Sunny Reader Pot",
+    price: "110 RON",
+    modelUrl: placeholderGlb,
+    thumbnailUrl: "/products/yellow-reader.jpg",
+    description: "Ghiveci personaj galben cu carte, PLA mat; vibe cozy pentru rafturi.",
+  },
+  {
+    id: "8",
+    name: "Knit Swing Planter",
     price: "150 RON",
-    modelUrl: "https://modelviewer.dev/shared-assets/models/Astronaut.glb",
-    thumbnailUrl: "https://images.unsplash.com/photo-1581781881744-9d3df728c6a2?q=80&w=500&auto=format&fit=crop",
-    description: "Forme sculpturale create prin tehnologie 3D avansată.",
+    modelUrl: placeholderGlb,
+    thumbnailUrl: "/products/knit-swing.jpg",
+    description: "Textură tricot, șezut pe leagăn cu sfoară inclusă; print în două culori.",
+  },
+  {
+    id: "9",
+    name: "Ribbed Duo Set",
+    price: "210 RON",
+    modelUrl: placeholderGlb,
+    thumbnailUrl: "/products/ribbed-duo.jpg",
+    description: "Set de două ghivece cilindrice pe picioare, în verde olive și greige.",
   },
 ];

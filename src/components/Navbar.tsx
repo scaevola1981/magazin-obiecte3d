@@ -28,7 +28,7 @@ export default function Navbar() {
         <Link href="/" className="flex items-center gap-3">
           <div className="w-2 h-2 bg-secondary rounded-full animate-pulse"></div>
           <span className="text-xl md:text-2xl font-display font-black tracking-tighter uppercase whitespace-nowrap text-white">
-            LOVE<span className="text-secondary">3D</span>
+            Print<span className="text-secondary">ly</span>
           </span>
         </Link>
         
@@ -50,10 +50,10 @@ export default function Navbar() {
           </div>
           
           <Link 
-            href="https://wa.me/40700000000" 
+            href={process.env.NEXT_PUBLIC_WA_NUMBER ? `https://wa.me/${process.env.NEXT_PUBLIC_WA_NUMBER}` : "https://wa.me/40700000000"}
             className="px-6 py-2 border border-secondary text-secondary hover:bg-secondary hover:text-black transition-all duration-500 font-display font-bold text-[9px] uppercase tracking-[0.2em] relative overflow-hidden group hidden md:block"
           >
-            <span className="relative z-10">Sync_WhatsApp</span>
+            <span className="relative z-10">Comandă WA</span>
           </Link>
 
           {/* Mobile Menu Toggle (only if needed, but we have bottom nav now) */}
