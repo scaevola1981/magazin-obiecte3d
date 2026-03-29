@@ -1,23 +1,22 @@
 import type { Metadata } from "next";
-import { Syne, Instrument_Sans } from "next/font/google";
+import { Space_Grotesk, Inter } from "next/font/google";
 import Navbar from "@/components/Navbar";
 import MobileCTA from "@/components/MobileCTA";
 import "./globals.css";
 
-const syne = Syne({
-  variable: "--font-syne",
+const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
-  weight: ["700", "800"],
+  variable: "--font-space-grotesk",
 });
 
-const instrumentSans = Instrument_Sans({
-  variable: "--font-instrument",
+const inter = Inter({
   subsets: ["latin"],
+  variable: "--font-inter",
 });
 
 export const metadata: Metadata = {
-  title: "LOVE3D • Digital Artifacts Lab",
-  description: "Magazin online de obiecte 3D cu vizualizare interactivă și comandă directă pe WhatsApp.",
+  title: "LOVE3D • Digital Lab",
+  description: "Futuristic 3D printing and digital artifacts marketplace.",
 };
 
 export default function RootLayout({
@@ -28,9 +27,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${syne.variable} ${instrumentSans.variable} h-full antialiased selection:bg-black selection:text-white`}
+      className={`${spaceGrotesk.variable} ${inter.variable} h-full antialiased selection:bg-[#D394FF] selection:text-black`}
     >
-      <body className="min-h-full flex flex-col bg-white overflow-x-hidden relative">
+      <body className="min-h-full flex flex-col bg-[#000000] text-white overflow-x-hidden relative">
         <Navbar />
         {/* Grain Texture Overlay */}
         <div className="fixed inset-0 pointer-events-none z-[9998] opacity-[0.03] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] brightness-100 contrast-150"></div>
