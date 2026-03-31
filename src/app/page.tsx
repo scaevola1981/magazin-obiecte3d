@@ -1,6 +1,6 @@
 import ProductCard from '@/components/ProductCard';
 import MobileProductCard from '@/components/MobileProductCard';
-import Sidebar from '@/components/Sidebar';
+import Sidebar from '../components/Sidebar';
 import Navbar from '@/components/Navbar';
 import { products } from '@/data/products';
 import { Flame, Star, Zap, Clock } from 'lucide-react';

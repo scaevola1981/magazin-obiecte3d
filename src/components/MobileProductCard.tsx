@@ -14,7 +14,7 @@ export default function MobileProductCard({ product }: Props) {
   const message = encodeURIComponent(
     `Salut! Vreau să comand ${product.name} (${product.price}).`
   );
-  const waNumber = process.env.NEXT_PUBLIC_WA_NUMBER || "40700000000";
+  const waNumber = process.env.NEXT_PUBLIC_WA_NUMBER;
 
   return (
     <div className="bg-surface-low rounded-2xl overflow-hidden border border-white/5 shadow-lg">
