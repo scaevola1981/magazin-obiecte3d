@@ -19,7 +19,7 @@ export default function Navbar() {
     <nav className={`fixed top-0 left-0 w-full z-[100] py-4 md:py-6 px-6 md:px-12 flex justify-between items-center transition-all duration-500 overflow-hidden`}>
       {/* Background HUD Glass Layer */}
       <div className={`absolute inset-0 transition-all duration-500 ${isScrolled ? 'bg-black/80 backdrop-blur-2xl border-b border-white/5 opacity-100' : 'bg-transparent opacity-0'}`}></div>
-      
+
       {/* HUD Scanner Line */}
       <div className={`absolute bottom-0 left-0 h-[1px] bg-linear-to-r from-transparent via-primary/30 to-transparent transition-all duration-1000 ${isScrolled ? 'w-full opacity-100' : 'w-0 opacity-0'}`}></div>
 
@@ -28,10 +28,10 @@ export default function Navbar() {
         <Link href="/" className="flex items-center gap-3">
           <div className="w-2 h-2 bg-secondary rounded-full animate-pulse"></div>
           <span className="text-xl md:text-2xl font-display font-black tracking-tighter uppercase whitespace-nowrap text-white">
-            Print<span className="text-secondary">ly</span>
+            BLOOM<span className="text-secondary">FORM</span>
           </span>
         </Link>
-        
+
         {/* Desktop Primary Nav (as seen in Stitch) */}
         <div className="hidden lg:flex items-center gap-10 text-[9px] font-display font-bold uppercase tracking-[0.4em] text-white/60">
           <Link href="#produse" className="hover:text-primary transition-colors hover:tracking-[0.5em] transition-all">Discover</Link>
@@ -48,8 +48,8 @@ export default function Navbar() {
             <button className="hover:text-secondary transition-colors"><ShoppingCart size={18} /></button>
             <button className="hover:text-secondary transition-colors"><User size={18} /></button>
           </div>
-          
-          <Link 
+
+          <Link
             href={process.env.NEXT_PUBLIC_WA_NUMBER ? `https://wa.me/${process.env.NEXT_PUBLIC_WA_NUMBER}` : "https://wa.me/40700000000"}
             className="px-6 py-2 border border-secondary text-secondary hover:bg-secondary hover:text-black transition-all duration-500 font-display font-bold text-[9px] uppercase tracking-[0.2em] relative overflow-hidden group hidden md:block"
           >
