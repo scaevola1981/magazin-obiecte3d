@@ -2,10 +2,44 @@ import ProductCard from '@/components/ProductCard';
 import MobileProductCard from '@/components/MobileProductCard';
 import Sidebar from '../components/Sidebar';
 import Navbar from '@/components/Navbar';
-import { products } from '@/data/products';
+import { mapDbToProduct } from '@/data/products';
+import { supabase } from '@/lib/supabase';
 import { Flame, Star, Zap, Clock } from 'lucide-react';
 
-export default function Home() {
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
+export default async function Home() {
+  const { data: dbProducts } = await supabase
+    .from('products')
+    .select('*');
+
+  // Map and deduplicate database products by name
+  const productsMap = new Map();
+  (dbProducts || []).forEach(dbProduct => {
+    const product = mapDbToProduct(dbProduct);
+    // If we haven't seen this name yet, or current product has a valid image and the previous one doesn't
+    if (!productsMap.has(product.name)) {
+      productsMap.set(product.name, product);
+    } else {
+      const existing = productsMap.get(product.name);
+      const currentHasImage = product.thumbnailUrl?.startsWith('http');
+      const existingHasImage = existing.thumbnailUrl?.startsWith('http');
+      if (currentHasImage && !existingHasImage) {
+        productsMap.set(product.name, product);
+      }
+    }
+  });
+
+  const products = Array.from(productsMap.values())
+    .sort((a, b) => {
+      const aOk = a.thumbnailUrl?.startsWith('http');
+      const bOk = b.thumbnailUrl?.startsWith('http');
+      if (aOk && !bOk) return -1;
+      if (!aOk && bOk) return 1;
+      return 0;
+    });
+
   return (
     <main className="min-h-screen bg-[#000000] text-white font-sans selection:bg-primary selection:text-black">
       {/* Mobile layout (Remains mostly same but slightly adjusted) */}
@@ -48,9 +82,9 @@ export default function Home() {
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-display font-bold tracking-tight">Trending Models</h2>
           </div>
-          <div className="flex flex-col gap-5">
-            {products.map((product) => (
-              <MobileProductCard key={product.id} product={product} />
+          <div data-product-count={products.length} className="flex flex-col gap-5">
+            {products.map((product, index) => (
+              <MobileProductCard key={`${product.id}-${index}`} product={product} />
             ))}
           </div>
         </div>
@@ -138,9 +172,13 @@ export default function Home() {
                 </div>
 
                 {/* Product Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6 mt-4">
+                <div data-product-count={products.length} className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6 mt-4">
+                  {/* Debug Info */}
+                  <div className="hidden">
+                    DEBUG_PRODUCTS: {products.map(p => p.name).join(' | ')}
+                  </div>
                   {products.map((product, index) => (
-                    <ProductCard key={product.id} product={product} index={index} />
+                    <ProductCard key={`${product.id}-${index}`} product={product} index={index} />
                   ))}
                 </div>
              </div>
@@ -153,6 +191,8 @@ export default function Home() {
                    <span>© 2026 Printly Prototype Lab</span>
                    <span className="w-1 h-1 bg-white/10 rounded-full"></span>
                    <span>System Status: Online</span>
+                   <span className="w-1 h-1 bg-white/10 rounded-full"></span>
+                   <span>Last Sync: {new Date().toISOString()}</span>
                 </div>
                 <div className="flex gap-12 text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">
                    <a href="#" className="hover:text-primary transition-colors">Documentation</a>
