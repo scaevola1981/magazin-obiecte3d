@@ -1,6 +1,5 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import { Home, Search, PlusSquare, ShoppingBag, User } from 'lucide-react';
 
 export default function MobileNav() {
