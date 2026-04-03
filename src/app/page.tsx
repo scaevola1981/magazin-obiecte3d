@@ -28,28 +28,25 @@ export default async function Home() {
   // Map and deduplicate database products by name
   const productsMap = new Map();
   
-  // First, process database products if any
+  // 1. First, add all LOCAL products to the map
+  localProducts.forEach(lp => {
+    productsMap.set(lp.name, lp);
+  });
+
+  // 2. Then, overwrite or add from database products if any
   dbProducts.forEach(dbProduct => {
     const product = mapDbToProduct(dbProduct);
-    if (!productsMap.has(product.name)) {
+    if (product.name) {
+      // If we already have a local version, decide if we want the DB one
+      // Usually, DB should win if it's not a placeholder
       productsMap.set(product.name, product);
-    } else {
-      const existing = productsMap.get(product.name);
-      const currentHasImage = product.thumbnailUrl?.startsWith('http');
-      const existingHasImage = existing.thumbnailUrl?.startsWith('http');
-      if (currentHasImage && !existingHasImage) {
-        productsMap.set(product.name, product);
-      }
     }
   });
 
-  // If no products from DB, or to ensure we ALWAYS have the core 9 products, 
-  // we can merge with local products.
-  // For this fix, if DB is empty/fails, we use localProducts.
   let finalProducts = Array.from(productsMap.values());
   
+  // Debug check to ensure we have at least local products
   if (finalProducts.length === 0) {
-    console.log('Using local products fallback');
     finalProducts = localProducts;
   }
 
