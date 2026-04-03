@@ -2,7 +2,7 @@ import ProductCard from '@/components/ProductCard';
 import MobileProductCard from '@/components/MobileProductCard';
 import Sidebar from '../components/Sidebar';
 import Navbar from '@/components/Navbar';
-import { mapDbToProduct } from '@/data/products';
+import { mapDbToProduct, products as localProducts } from '@/data/products';
 import { supabase } from '@/lib/supabase';
 import { Flame, Star, Zap, Clock } from 'lucide-react';
 
@@ -10,15 +10,27 @@ export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 export default async function Home() {
-  const { data: dbProducts } = await supabase
-    .from('products')
-    .select('*');
+  let dbProducts = [];
+  try {
+    const { data, error } = await supabase
+      .from('products')
+      .select('*');
+    
+    if (error) {
+      console.error('Supabase error:', error.message);
+    } else {
+      dbProducts = data || [];
+    }
+  } catch (err) {
+    console.error('Failed to fetch from Supabase:', err);
+  }
 
   // Map and deduplicate database products by name
   const productsMap = new Map();
-  (dbProducts || []).forEach(dbProduct => {
+  
+  // First, process database products if any
+  dbProducts.forEach(dbProduct => {
     const product = mapDbToProduct(dbProduct);
-    // If we haven't seen this name yet, or current product has a valid image and the previous one doesn't
     if (!productsMap.has(product.name)) {
       productsMap.set(product.name, product);
     } else {
@@ -31,14 +43,23 @@ export default async function Home() {
     }
   });
 
-  const products = Array.from(productsMap.values())
-    .sort((a, b) => {
-      const aOk = a.thumbnailUrl?.startsWith('http');
-      const bOk = b.thumbnailUrl?.startsWith('http');
-      if (aOk && !bOk) return -1;
-      if (!aOk && bOk) return 1;
-      return 0;
-    });
+  // If no products from DB, or to ensure we ALWAYS have the core 9 products, 
+  // we can merge with local products.
+  // For this fix, if DB is empty/fails, we use localProducts.
+  let finalProducts = Array.from(productsMap.values());
+  
+  if (finalProducts.length === 0) {
+    console.log('Using local products fallback');
+    finalProducts = localProducts;
+  }
+
+  const products = finalProducts.sort((a, b) => {
+    const aOk = a.thumbnailUrl?.startsWith('http') || a.thumbnailUrl?.startsWith('/');
+    const bOk = b.thumbnailUrl?.startsWith('http') || b.thumbnailUrl?.startsWith('/');
+    if (aOk && !bOk) return -1;
+    if (!aOk && bOk) return 1;
+    return 0;
+  });
 
   return (
     <main className="min-h-screen bg-[#000000] text-white font-sans selection:bg-primary selection:text-black">
@@ -62,7 +83,7 @@ export default async function Home() {
             <div className="text-xs font-display uppercase tracking-[0.35em] text-secondary">Community Picks</div>
             <h1 className="text-3xl font-display font-black leading-tight">Print Your Reality</h1>
             <p className="text-sm text-white/70 italic">
-              "Blueprints for the future, ready to print today."
+              Blueprints for the future, ready to print today.
             </p>
           </div>
         </div>

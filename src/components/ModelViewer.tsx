@@ -10,7 +10,7 @@ interface ModelViewerProps {
 }
 
 const ModelViewer = memo(function ModelViewer({ src, iosSrc, alt, poster }: ModelViewerProps) {
-  const viewerRef = useRef<any>(null);
+  const viewerRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     // Dynamically import the model-viewer script on the client side
@@ -21,7 +21,7 @@ const ModelViewer = memo(function ModelViewer({ src, iosSrc, alt, poster }: Mode
 
   return (
     <div className="relative w-full aspect-square bg-gray-50 rounded-lg overflow-hidden border border-gray-200 shadow-sm">
-      {/* @ts-ignore */}
+      {/* @ts-expect-error model-viewer is a custom element without TS types */}
       <model-viewer
         ref={viewerRef}
         src={src}
@@ -39,7 +39,7 @@ const ModelViewer = memo(function ModelViewer({ src, iosSrc, alt, poster }: Mode
         <div slot="progress-bar" className="absolute inset-0 flex items-center justify-center bg-white/50">
           <div className="w-12 h-12 border-4 border-black border-t-transparent rounded-full animate-spin"></div>
         </div>
-        {/* @ts-ignore */}
+        {/* @ts-expect-error model-viewer is a custom element without TS types */}
       </model-viewer>
     </div>
   );
