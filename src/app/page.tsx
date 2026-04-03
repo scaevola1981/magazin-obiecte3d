@@ -11,6 +11,7 @@ export const revalidate = 0;
 
 export default async function Home() {
   let dbProducts = [];
+  let fetchError = null;
   try {
     const { data, error } = await supabase
       .from('products')
@@ -18,11 +19,13 @@ export default async function Home() {
     
     if (error) {
       console.error('Supabase error:', error.message);
+      fetchError = error.message;
     } else {
       dbProducts = data || [];
     }
-  } catch (err) {
+  } catch (err: any) {
     console.error('Failed to fetch from Supabase:', err);
+    fetchError = err?.message || 'Unknown error';
   }
 
   // Map and deduplicate database products by name
@@ -190,8 +193,15 @@ export default async function Home() {
                 </div>
 
                 {/* Product Grid */}
-                <div className="mb-4 text-xs text-white/20 uppercase tracking-widest font-bold">
-                  Showing {products.length} models
+                <div className="mb-4 flex flex-col gap-1">
+                  <div className="text-xs text-white/20 uppercase tracking-widest font-bold">
+                    Showing {products.length} models
+                  </div>
+                  {fetchError && (
+                    <div className="text-[10px] text-red-500/50 uppercase font-mono bg-red-500/5 px-2 py-1 rounded">
+                      Supabase Sync Alert: {fetchError}
+                    </div>
+                  )}
                 </div>
                 <div data-product-count={products.length} className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6 mt-4">
                   {/* Debug Info */}
