@@ -98,7 +98,7 @@ export default async function Home() {
 
         <div className="flex flex-col gap-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-display font-bold tracking-tight">Trending Models</h2>
+            <h2 className="text-xl font-display font-bold tracking-tight">Trending Models ({products.length})</h2>
           </div>
           <div data-product-count={products.length} className="flex flex-col gap-5">
             {products.map((product, index) => (
@@ -190,6 +190,9 @@ export default async function Home() {
                 </div>
 
                 {/* Product Grid */}
+                <div className="mb-4 text-xs text-white/20 uppercase tracking-widest font-bold">
+                  Showing {products.length} models
+                </div>
                 <div data-product-count={products.length} className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6 mt-4">
                   {/* Debug Info */}
                   <div className="hidden">
