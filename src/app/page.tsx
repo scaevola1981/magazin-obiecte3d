@@ -3,7 +3,7 @@ import MobileProductCard from '@/components/MobileProductCard';
 import Sidebar from '../components/Sidebar';
 import Navbar from '@/components/Navbar';
 import { mapDbToProduct, products as localProducts } from '@/data/products';
-import { supabase } from '@/lib/supabase';
+import { supabase, getSupabaseConfigStatus } from '@/lib/supabase';
 import { Flame, Star, Zap, Clock } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
@@ -198,8 +198,15 @@ export default async function Home() {
                     Showing {products.length} models
                   </div>
                   {fetchError && (
-                    <div className="text-[10px] text-red-500/50 uppercase font-mono bg-red-500/5 px-2 py-1 rounded">
-                      Supabase Sync Alert: {fetchError}
+                    <div className="flex flex-col gap-2 p-3 bg-red-500/5 rounded border border-red-500/10">
+                      <div className="text-[10px] text-red-500/50 uppercase font-mono">
+                        Supabase Sync Alert: {fetchError}
+                      </div>
+                      <div className="grid grid-cols-2 gap-4 text-[9px] font-mono text-white/30 uppercase">
+                        <div>URL: {getSupabaseConfigStatus().hasUrl ? 'SET' : 'MISSING'} ({getSupabaseConfigStatus().urlStart})</div>
+                        <div>KEY: {getSupabaseConfigStatus().hasKey ? `SET (${getSupabaseConfigStatus().keyLength} chars)` : 'MISSING'}</div>
+                        <div>HTTPS: {getSupabaseConfigStatus().isHttps ? 'YES' : 'NO'}</div>
+                      </div>
                     </div>
                   )}
                 </div>
