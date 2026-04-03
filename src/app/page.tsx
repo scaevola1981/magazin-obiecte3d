@@ -213,7 +213,7 @@ export default async function Home() {
                    <span className="w-1 h-1 bg-white/10 rounded-full"></span>
                    <span>System Status: Online</span>
                    <span className="w-1 h-1 bg-white/10 rounded-full"></span>
-                   <span>Last Sync: {new Date().toISOString()}</span>
+                   <span>Last Sync: Apr 3, 2026</span>
                 </div>
                 <div className="flex gap-12 text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">
                    <a href="#" className="hover:text-primary transition-colors">Documentation</a>
