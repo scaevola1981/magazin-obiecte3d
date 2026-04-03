@@ -1,11 +1,20 @@
 import { createClient } from '@supabase/supabase-js';
 
-// Sanitize environment variables to prevent "fetch failed" errors
-const supabaseUrl = (process.env.NEXT_PUBLIC_SUPABASE_URL || '').trim().replace(/\/$/, '');
+// Sanitize and FORCE correct format
+let rawUrl = (process.env.NEXT_PUBLIC_SUPABASE_URL || '').trim();
+if (rawUrl && !rawUrl.startsWith('http')) {
+  rawUrl = `https://${rawUrl}`;
+}
+const supabaseUrl = rawUrl.replace(/\/$/, '');
 const supabaseAnonKey = (process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '').trim();
 
-if (!supabaseUrl.startsWith('http')) {
-  console.error('CRITICAL: NEXT_PUBLIC_SUPABASE_URL must start with http/https');
-}
-
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+// Masked diagnostic helper for debugging
+export const getSupabaseConfigStatus = () => ({
+  hasUrl: !!supabaseUrl,
+  urlStart: supabaseUrl ? supabaseUrl.substring(0, 15) + '...' : 'MISSING',
+  hasKey: !!supabaseAnonKey,
+  keyLength: supabaseAnonKey.length,
+  isHttps: supabaseUrl.startsWith('https://')
+});
