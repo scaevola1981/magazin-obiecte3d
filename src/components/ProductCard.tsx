@@ -19,12 +19,8 @@ export default function ProductCard({ product, index }: ProductCardProps) {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-100px" }}
-      transition={{ duration: 0.5, delay: index * 0.05 }}
-      className="group flex flex-col bg-[#111111] border border-white/5 rounded-xl overflow-hidden hover:border-white/10 transition-all duration-300"
+    <div
+      className="group flex flex-col bg-[#111111] border border-white/5 rounded-xl overflow-hidden hover:border-white/10 transition-all duration-300 min-h-[300px]"
     >
       {/* Image Container */}
       <div className="relative aspect-[4/3] overflow-hidden bg-[#0A0A0A]">
@@ -88,6 +84,6 @@ export default function ProductCard({ product, index }: ProductCardProps) {
           Details & Order
         </button>
       </div>
-    </motion.div>
+    </div>
   );
 }
