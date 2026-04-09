@@ -3,6 +3,7 @@ import MobileProductCard from '@/components/MobileProductCard';
 import Sidebar from '../components/Sidebar';
 import Navbar from '@/components/Navbar';
 import Link from 'next/link';
+import { Suspense } from 'react';
 import { mapDbToProduct, products as localProducts } from '@/data/products';
 import { supabase, getSupabaseConfigStatus } from '@/lib/supabase';
 import { Flame, Star, Zap, Clock, AlertTriangle, Search } from 'lucide-react';
@@ -135,7 +136,9 @@ export default async function Home({
       {/* Desktop Dashboard Layout */}
       <div className="hidden md:flex">
         {/* Sidebar Container */}
-        <Sidebar />
+        <Suspense fallback={null}>
+          <Sidebar />
+        </Suspense>
 
         {/* Main Content Area */}
         <div className="flex-1 ml-64 min-h-screen flex flex-col bg-[#050505]">
