@@ -1,12 +1,13 @@
 'use client';
 
-import { Home, Search, X } from 'lucide-react';
+import { Home, Search, X, Grid, MessageCircle } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 export default function MobileNav() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const waNumber = process.env.NEXT_PUBLIC_WA_NUMBER || '40765181199';
   const [isSearching, setIsSearching] = useState(false);
   const [searchValue, setSearchValue] = useState(searchParams.get('q') || '');
 
@@ -57,7 +58,7 @@ export default function MobileNav() {
 
   return (
     <div className="fixed bottom-0 left-0 w-full z-[100] md:hidden px-4 pb-8">
-      <div className={`bg-black/90 backdrop-blur-3xl border border-white/10 rounded-full h-16 flex items-center transition-all duration-500 shadow-[0_-10px_40px_rgba(0,0,0,0.5)] ${isSearching ? 'px-6 gap-3' : 'justify-center gap-20 px-2'}`}>
+      <div className={`bg-black/90 backdrop-blur-3xl border border-white/10 rounded-full h-16 flex items-center transition-all duration-500 shadow-[0_-10px_40px_rgba(0,0,0,0.5)] ${isSearching ? 'px-6 gap-3' : 'justify-between px-6'}`}>
         {/* Neon Indicator Background */}
         <div className="absolute inset-0 bg-linear-to-b from-primary/5 to-transparent pointer-events-none rounded-full"></div>
 
@@ -75,12 +76,33 @@ export default function MobileNav() {
           <>
             <button
               onClick={handleHomeClick}
-              className={`flex flex-col items-center justify-center w-12 h-12 transition-colors ${!searchParams.get('q') && !isSearching ? 'text-secondary' : 'text-white/40'}`}
+              className={`flex flex-col items-center justify-center w-12 h-12 transition-colors ${!searchParams.get('q') && searchParams.get('tab') !== 'categories' && !isSearching ? 'text-secondary' : 'text-white/40 hover:text-white'}`}
             >
               <Home size={20} />
               <span className="text-[7px] font-display font-bold uppercase tracking-widest mt-1">Home</span>
-              {!searchParams.get('q') && <div className="w-1 h-1 bg-secondary rounded-full mt-1 animate-pulse"></div>}
+              {(!searchParams.get('q') && searchParams.get('tab') !== 'categories') && <div className="w-1 h-1 bg-secondary rounded-full mt-1 animate-pulse absolute bottom-1"></div>}
             </button>
+
+            <button
+              onClick={() => { setIsSearching(false); router.push('/?tab=categories', { scroll: false }); }}
+              className={`flex flex-col items-center justify-center w-12 h-12 transition-colors ${searchParams.get('tab') === 'categories' ? 'text-primary' : 'text-white/40 hover:text-white'}`}
+            >
+              <Grid size={20} />
+              <span className="text-[7px] font-display font-bold uppercase tracking-widest mt-1">Catalog</span>
+              {searchParams.get('tab') === 'categories' && <div className="w-1 h-1 bg-primary rounded-full mt-1 animate-pulse absolute bottom-1"></div>}
+            </button>
+
+            {/* Custom Order Button - Highlighted */}
+            <a
+              href={`https://wa.me/${waNumber}?text=Salut, vreau si eu o lucrare 3D la comanda. Putem discuta detaliile?`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex flex-col items-center justify-center w-12 h-12 transition-all hover:scale-110 text-white group"
+            >
+              <div className="bg-purple-500/20 p-2.5 rounded-full border border-purple-500 group-hover:bg-purple-500 transition-colors">
+                <MessageCircle size={18} className="text-purple-400 group-hover:text-white" />
+              </div>
+            </a>
 
             <button
               onClick={() => setIsSearching(true)}
@@ -88,7 +110,7 @@ export default function MobileNav() {
             >
               <Search size={20} />
               <span className="text-[7px] font-display font-bold uppercase tracking-widest mt-1">Search</span>
-              {searchParams.get('q') && <div className="w-1 h-1 bg-primary rounded-full mt-1 animate-pulse"></div>}
+              {searchParams.get('q') && <div className="w-1 h-1 bg-primary rounded-full mt-1 animate-pulse absolute bottom-1"></div>}
             </button>
           </>
         ) : (
