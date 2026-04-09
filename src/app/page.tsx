@@ -229,7 +229,7 @@ export default async function Home({
                     </button>
                   </div>
                </div>
-             ) : activeTab === 'trending' ? (
+             ) : (
                <div className="bg-white/5 border border-white/10 rounded-2xl p-8 flex flex-col gap-6">
                   <div className="flex items-center justify-between">
                     <div>
