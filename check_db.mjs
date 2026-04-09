@@ -1,29 +1,17 @@
 import { createClient } from '@supabase/supabase-js';
+import { readFileSync } from 'fs';
 
-const supabaseUrl = 'https://socqbkfurzfbxqqwijnnd.supabase.co';
-const supabaseAnonKey = 'sb_publishable_iyrvpbYP8T1ZKfsQPhGRWg_2LN7T8uR';
+const env = Object.fromEntries(
+  readFileSync('.env.local', 'utf8')
+    .split('\n').filter(l => l.includes('='))
+    .map(l => { const [k, ...v] = l.split('='); return [k.trim(), v.join('=').trim()]; })
+);
 
-console.log('Testing connection to:', supabaseUrl);
+const supabase = createClient(env.NEXT_PUBLIC_SUPABASE_URL, env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY);
+const { data } = await supabase.from('products').select('id, name, tags').order('name');
 
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
-
-async function test() {
-  const { data, error } = await supabase
-    .from('products')
-    .select('*');
-
-  if (error) {
-    console.error('Error fetching products:', error);
-  } else {
-    console.log(`Found ${data?.length || 0} products.`);
-    if (data && data.length > 0) {
-      data.forEach((p, i) => {
-        console.log(` Product ${i + 1}: ${p.name} (ID: ${p.id})`);
-        console.log(`   - thumb: ${p.thumbnail_url}`);
-        console.log(`   - model: ${p.model_url}`);
-      });
-    }
-  }
-}
-
-test();
+console.log('\n📦 Toate produsele și categoriile lor:\n');
+data.forEach((p, i) => {
+  console.log(`${String(i+1).padStart(2)}. [${(p.tags || []).join(', ') || 'FARA CATEGORIE'}] → ${p.name}`);
+});
+console.log(`\nTotal: ${data.length} produse`);

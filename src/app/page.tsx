@@ -19,6 +19,7 @@ export default async function Home({
   const params = await searchParams;
   const query = typeof params.q === 'string' ? params.q.trim().toLowerCase() : '';
   const activeTab = typeof params.tab === 'string' ? params.tab : 'trending';
+  const activeCat = typeof params.cat === 'string' ? params.cat.toLowerCase() : 'all';
 
   let dbProducts = [];
   let fetchError = null;
@@ -68,6 +69,11 @@ export default async function Home({
     products = [...products].sort((a, b) => a.category.localeCompare(b.category));
   }
 
+  // Filter by category
+  if (activeCat !== 'all') {
+    products = products.filter(p => p.category.toLowerCase() === activeCat);
+  }
+
   // Filter by search query if present
   if (query) {
     products = products.filter(p => 
@@ -76,6 +82,10 @@ export default async function Home({
       p.category.toLowerCase().includes(query)
     );
   }
+
+  // Build category list from all (unfiltered) products for display in buttons
+  const allProducts = Array.from(productsMap.values());
+  const categoryList = ['all', ...new Set(allProducts.map(p => p.category.toLowerCase()))];
 
   return (
     <main className="min-h-screen bg-[#000000] text-white font-sans selection:bg-primary selection:text-black">
@@ -177,10 +187,10 @@ export default async function Home({
                   <div className="flex items-center justify-between">
                     <div>
                       <h2 className="text-2xl font-display font-black uppercase tracking-widest text-white">
-                        {activeTab === 'new' ? 'New Arrivals' : 'Categorized Models'}
+                        {activeTab === 'new' ? 'Produse Noi' : 'Categorized Models'}
                       </h2>
                       <p className="text-white/40 text-[10px] uppercase tracking-[0.3em] font-bold mt-1">
-                        Explore our latest additions to the blueprint library
+                       Exploreaza si comanda direct prin WhatsApp!
                       </p>
                     </div>
                     <div className="flex items-center gap-4">
@@ -203,7 +213,7 @@ export default async function Home({
                    <div className="flex items-center gap-10">
                       {[
                         { icon: Flame, label: 'Trending', id: 'trending' },
-                        { icon: Zap, label: 'New Arrival', id: 'new' },
+                        { icon: Zap, label: 'Produse Noi', id: 'new' },
                         { icon: Clock, label: 'Categories', id: 'categories' }
                       ].map((item) => (
                         <Link 
@@ -228,17 +238,28 @@ export default async function Home({
                    </div>
                 </div>
 
-                {/* Sub-tag Cloud */}
-                <div className="flex items-center gap-3 overflow-x-auto no-scrollbar py-2">
-                   {['All', 'Household', 'Tools', 'Art', 'Mechanical', 'Miniatures', 'Prop & Cosplay', 'Hobby & DIY'].map((tag, i) => (
-                      <button 
-                         key={tag} 
-                         className={`px-4 py-2 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all ${i === 0 ? 'bg-white text-black' : 'bg-white/5 border border-white/10 text-white/40 hover:bg-white/10 hover:text-white'}`}
-                      >
-                         {tag}
-                      </button>
-                   ))}
-                </div>
+                {/* Sub-tag Cloud — real categories from DB */}
+                 <div className="flex items-center gap-3 overflow-x-auto no-scrollbar py-2">
+                    {categoryList.map((cat) => {
+                      const isActive = activeCat === cat;
+                      const label = cat === 'all' ? 'All' : cat.charAt(0).toUpperCase() + cat.slice(1);
+                      const count = cat === 'all' ? allProducts.length : allProducts.filter(p => p.category.toLowerCase() === cat).length;
+                      const href = cat === 'all' ? '/' : `?cat=${encodeURIComponent(cat)}`;
+                      return (
+                        <a
+                          key={cat}
+                          href={href}
+                          className={`px-4 py-2 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all whitespace-nowrap ${
+                            isActive
+                              ? 'bg-white text-black'
+                              : 'bg-white/5 border border-white/10 text-white/40 hover:bg-white/10 hover:text-white'
+                          }`}
+                        >
+                          {label} <span className="opacity-50">({count})</span>
+                        </a>
+                      );
+                    })}
+                 </div>
 
                 {/* Product Grid Header & Diagnostics */}
                 <div className="mb-4 flex flex-col gap-1">
@@ -284,7 +305,7 @@ export default async function Home({
                   )}
                 </div>
 
-                <div data-product-count={products.length} className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6 mt-4">
+                <div data-product-count={products.length} className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 mt-4">
                   {/* Debug Info */}
                   <div className="hidden">
                     DEBUG_PRODUCTS: {products.map(p => p.name).join(' | ')}
