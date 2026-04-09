@@ -58,7 +58,7 @@ export default function MobileNav() {
 
   return (
     <div className="fixed bottom-0 left-0 w-full z-[100] md:hidden px-4 pb-8">
-      <div className={`bg-black/90 backdrop-blur-3xl border border-white/10 rounded-full h-16 flex items-center transition-all duration-500 shadow-[0_-10px_40px_rgba(0,0,0,0.5)] ${isSearching ? 'px-6 gap-3' : 'justify-between px-6'}`}>
+      <div className={`bg-black/90 backdrop-blur-3xl border border-white/10 rounded-full h-16 flex items-center transition-all duration-500 shadow-[0_-10px_40px_rgba(0,0,0,0.5)] ${isSearching ? 'px-6 gap-3' : 'justify-around px-2'}`}>
         {/* Neon Indicator Background */}
         <div className="absolute inset-0 bg-linear-to-b from-primary/5 to-transparent pointer-events-none rounded-full"></div>
 
@@ -81,15 +81,6 @@ export default function MobileNav() {
               <Home size={20} />
               <span className="text-[7px] font-display font-bold uppercase tracking-widest mt-1">Home</span>
               {(!searchParams.get('q') && searchParams.get('tab') !== 'categories') && <div className="w-1 h-1 bg-secondary rounded-full mt-1 animate-pulse absolute bottom-1"></div>}
-            </button>
-
-            <button
-              onClick={() => { setIsSearching(false); router.push('/?tab=categories', { scroll: false }); }}
-              className={`flex flex-col items-center justify-center w-12 h-12 transition-colors ${searchParams.get('tab') === 'categories' ? 'text-primary' : 'text-white/40 hover:text-white'}`}
-            >
-              <Grid size={20} />
-              <span className="text-[7px] font-display font-bold uppercase tracking-widest mt-1">Catalog</span>
-              {searchParams.get('tab') === 'categories' && <div className="w-1 h-1 bg-primary rounded-full mt-1 animate-pulse absolute bottom-1"></div>}
             </button>
 
             {/* Custom Order Button - Highlighted */}
