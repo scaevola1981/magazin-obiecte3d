@@ -105,7 +105,7 @@ export default async function Home({
   return (
     <main className="min-h-screen bg-[#000000] text-white font-sans selection:bg-primary selection:text-black">
       {/* Mobile layout (Remains mostly same but slightly adjusted) */}
-      <section className="md:hidden px-4 pt-20 pb-28 flex flex-col gap-8 max-w-xl mx-auto">
+      <section className="lg:hidden px-4 pt-20 pb-28 flex flex-col gap-8 max-w-xl mx-auto">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-lg bg-linear-to-br from-primary to-secondary"></div>
@@ -195,15 +195,15 @@ export default async function Home({
       </section>
 
       {/* Desktop Dashboard Layout */}
-      <div className="hidden md:flex">
+      <div className="hidden lg:flex">
         {/* Sidebar Container */}
         <Suspense fallback={null}>
           <Sidebar />
         </Suspense>
 
         {/* Main Content Area */}
-        <div className="flex-1 ml-64 min-h-screen flex flex-col bg-[#050505]">
-          <div className="md:hidden">
+        <div className="flex-1 lg:ml-64 min-h-screen flex flex-col bg-[#050505]">
+          <div className="lg:hidden">
             <Navbar />
           </div>
 
