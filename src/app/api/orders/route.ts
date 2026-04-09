@@ -69,7 +69,7 @@ export async function GET(req: NextRequest) {
         *,
         products:product_id (
           name,
-          thumbnailUrl
+          thumbnail_url
         )
       `)
       .order('created_at', { ascending: false });

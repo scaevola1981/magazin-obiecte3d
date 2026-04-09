@@ -11,7 +11,7 @@ type Order = {
   created_at: string;
   products?: {
     name: string;
-    thumbnailUrl: string;
+    thumbnail_url: string;
   }
 };
 
@@ -73,7 +73,7 @@ export default function AdminOrders() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 rounded-lg bg-black overflow-hidden shrink-0 border border-white/5">
-                <img src={order.products?.thumbnailUrl || '/placeholder-product.jpg'} alt="" className="w-full h-full object-cover" />
+                <img src={order.products?.thumbnail_url || '/placeholder-product.jpg'} alt="" className="w-full h-full object-cover" />
               </div>
               <div>
                 <h3 className="text-white font-bold text-sm">{order.products?.name || 'Produs sters'}</h3>
