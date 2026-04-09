@@ -6,6 +6,7 @@ type Order = {
   id: string;
   product_id: string;
   customer_name: string;
+  custom_notes?: string;
   status: string;
   created_at: string;
   products?: {
@@ -92,6 +93,13 @@ export default function AdminOrders() {
               </p>
             </div>
           </div>
+          
+          {order.custom_notes && (
+            <div className="p-3 bg-black/50 border border-white/5 rounded-xl mt-1">
+              <span className="text-[10px] uppercase font-bold tracking-widest text-purple-400/80 mb-1 block flex items-center gap-1">Note Suplimentare</span>
+              <p className="text-xs text-white/70 italic leading-relaxed">{order.custom_notes}</p>
+            </div>
+          )}
 
           <div className="flex items-center gap-2 pt-3 border-t border-white/5">
             <button 

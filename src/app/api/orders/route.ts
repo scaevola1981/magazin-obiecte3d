@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
   try {
-    const { productId, customerName } = await req.json();
+    const { productId, customerName, customNotes } = await req.json();
 
     if (!productId || !customerName) {
       return NextResponse.json({ error: 'Product ID and Customer Name are required' }, { status: 400 });
@@ -15,15 +15,21 @@ export async function POST(req: NextRequest) {
     // Create client with service role to bypass RLS for inserting orders
     const supabase = createClient(supabaseUrl, supabaseKey);
 
+    const payload: any = {
+      product_id: productId,
+      customer_name: customerName,
+      status: 'în așteptare'
+    };
+
+    // If custom_notes exists in the schema, add it.
+    // Daca coloana nu exista, va da o eroare in logs dar putem continua.
+    if (customNotes) {
+      payload.custom_notes = customNotes;
+    }
+
     const { data: orderParams, error } = await supabase
       .from('orders')
-      .insert([
-        {
-          product_id: productId,
-          customer_name: customerName,
-          status: 'în așteptare'
-        }
-      ])
+      .insert([payload])
       .select();
 
     if (error) {

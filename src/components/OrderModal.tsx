@@ -13,6 +13,7 @@ interface OrderModalProps {
 
 export default function OrderModal({ isOpen, onClose, product, waNumber }: OrderModalProps) {
   const [name, setName] = useState('');
+  const [notes, setNotes] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
 
@@ -33,7 +34,8 @@ export default function OrderModal({ isOpen, onClose, product, waNumber }: Order
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           productId: product.id,
-          customerName: name.trim()
+          customerName: name.trim(),
+          customNotes: notes.trim()
         })
       });
 
@@ -42,7 +44,11 @@ export default function OrderModal({ isOpen, onClose, product, waNumber }: Order
       }
 
       // Generate WhatsApp message
-      const message = `Salut! Sunt ${name.trim()} și aș dori să comand "${product.name}" (${product.price}). Mă puteți ajuta cu mai multe detalii?`;
+      let message = `Salut! Sunt ${name.trim()} și aș dori să comand "${product.name}" (${product.price}).`;
+      if (notes.trim()) {
+        message += `\n\nDetalii extra din formular: ${notes.trim()}`;
+      }
+      message += `\n\nMă puteți ajuta cu mai multe detalii?`;
       
       // Open WhatsApp
       window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(message)}`, '_blank');
@@ -112,6 +118,17 @@ export default function OrderModal({ isOpen, onClose, product, waNumber }: Order
                     required
                   />
                   {error && <p className="text-red-400 text-xs mt-2 font-medium">{error}</p>}
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-widest text-white/50 mb-2">Detalii opționale (Culoare, Dimensiuni)</label>
+                  <textarea
+                    value={notes}
+                    onChange={(e) => setNotes(e.target.value)}
+                    placeholder="Ex: Îl doresc pe culoarea roșu, varianta mare..."
+                    rows={2}
+                    className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/20 focus:outline-hidden focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all font-medium resize-none text-sm"
+                  />
                 </div>
 
                 <div className="pt-2">
