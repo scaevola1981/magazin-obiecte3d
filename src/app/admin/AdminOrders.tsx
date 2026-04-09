@@ -70,18 +70,18 @@ export default function AdminOrders() {
     <div className="flex flex-col gap-4">
       {orders.map((order) => (
         <div key={order.id} className="bg-white/5 border border-white/10 rounded-2xl p-4 flex flex-col gap-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
+          <div className="flex items-start justify-between gap-2">
+            <div className="flex items-center gap-3 min-w-0">
               <div className="w-12 h-12 rounded-lg bg-black overflow-hidden shrink-0 border border-white/5">
                 <img src={order.products?.thumbnail_url || '/placeholder-product.jpg'} alt="" className="w-full h-full object-cover" />
               </div>
-              <div>
-                <h3 className="text-white font-bold text-sm">{order.products?.name || 'Produs sters'}</h3>
-                <p className="text-white/50 text-xs mt-0.5">{order.customer_name}</p>
+              <div className="min-w-0">
+                <h3 className="text-white font-bold text-sm truncate">{order.products?.name || 'Produs sters'}</h3>
+                <p className="text-white/50 text-xs mt-0.5 truncate">{order.customer_name}</p>
               </div>
             </div>
-            <div className="text-right">
-              <span className={`text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded-md ${
+            <div className="text-right shrink-0">
+              <span className={`text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded-md whitespace-nowrap ${
                 order.status === 'finalizat' ? 'bg-green-500/20 text-green-400' :
                 order.status === 'anulat' ? 'bg-red-500/20 text-red-400' :
                 'bg-orange-500/20 text-orange-400'
