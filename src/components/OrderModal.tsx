@@ -74,11 +74,11 @@ export default function OrderModal({ isOpen, onClose, product, waNumber }: Order
             className="fixed inset-0 bg-black/80 z-[100] backdrop-blur-sm"
           />
           <motion.div
-            initial={{ opacity: 0, y: '100%', scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: '100%', scale: 0.95 }}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="fixed bottom-0 left-0 right-0 md:bottom-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 z-[101] bg-[#111] md:rounded-3xl rounded-t-3xl border border-white/10 md:max-w-md w-full shadow-2xl overflow-hidden"
+            className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[101] bg-[#111] rounded-3xl border border-white/10 w-[90%] md:max-w-md shadow-2xl overflow-hidden"
           >
             <div className="p-6 md:p-8">
               <div className="flex justify-between items-start mb-6">
