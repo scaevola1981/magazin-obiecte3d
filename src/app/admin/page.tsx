@@ -182,18 +182,26 @@ export default function AdminPage() {
 
           {/* Category */}
           <div>
-            <label className="text-white/50 text-xs uppercase tracking-widest font-bold mb-2 block">Categorie *</label>
-            <select
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-purple-500 text-sm"
-            >
+            <label className="text-white/50 text-xs uppercase tracking-widest font-bold mb-3 block">Categorie *</label>
+            <div className="grid grid-cols-2 gap-2">
               {CATEGORIES.map((c) => (
-                <option key={c.value} value={c.value} className="bg-black">
-                  {c.label}
-                </option>
+                <button
+                  key={c.value}
+                  type="button"
+                  onClick={() => setCategory(c.value)}
+                  className={`flex items-center gap-3 px-4 py-4 rounded-xl border text-left transition-all ${
+                    category === c.value
+                      ? 'bg-purple-500/20 border-purple-500 text-white'
+                      : 'bg-white/5 border-white/10 text-white/50 hover:border-white/30 hover:text-white/80'
+                  }`}
+                >
+                  <span className="text-2xl leading-none">{c.label.split(' ')[0]}</span>
+                  <span className="text-sm font-semibold leading-tight">
+                    {c.label.split(' ').slice(1).join(' ')}
+                  </span>
+                </button>
               ))}
-            </select>
+            </div>
           </div>
 
           {/* Description */}
