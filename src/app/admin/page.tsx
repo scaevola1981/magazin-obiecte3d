@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import { Upload, Plus, CheckCircle, XCircle, Loader2, Lock, Image as ImageIcon } from 'lucide-react';
+import { Upload, Plus, CheckCircle, XCircle, Loader2, Lock, Image as ImageIcon, ChevronDown } from 'lucide-react';
 
 const CATEGORIES = [
   { value: 'planter', label: '🪴 Planter / Ghivece' },
@@ -23,6 +23,7 @@ export default function AdminPage() {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [status, setStatus] = useState<'idle' | 'uploading' | 'saving' | 'success' | 'error'>('idle');
   const [message, setMessage] = useState('');
+  const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -180,20 +181,32 @@ export default function AdminPage() {
             />
           </div>
 
-          {/* Category */}
-          <div>
+          {/* Category Dropdown Custom */}
+          <div className="relative">
             <label className="text-white/50 text-xs uppercase tracking-widest font-bold mb-2 block">Categorie *</label>
-            <select
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3.5 text-white focus:outline-none focus:border-purple-500 text-base appearance-none"
+            <button
+              type="button"
+              onClick={() => setIsCategoryOpen(!isCategoryOpen)}
+              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-white focus:outline-none focus:border-purple-500 text-base text-left flex items-center justify-between transition-colors"
             >
-              {CATEGORIES.map((c) => (
-                <option key={c.value} value={c.value} className="bg-[#111111] text-white text-base py-3">
-                  {c.label}
-                </option>
-              ))}
-            </select>
+              <span>{CATEGORIES.find(c => c.value === category)?.label}</span>
+              <ChevronDown size={20} className={`text-white/50 transition-transform ${isCategoryOpen ? 'rotate-180' : ''}`} />
+            </button>
+
+            {isCategoryOpen && (
+              <div className="absolute top-full left-0 w-full mt-2 bg-[#111111] border border-white/10 rounded-xl shadow-2xl z-50 overflow-hidden flex flex-col">
+                {CATEGORIES.map((c) => (
+                  <button
+                    key={c.value}
+                    type="button"
+                    onClick={() => { setCategory(c.value); setIsCategoryOpen(false); }}
+                    className={`w-full text-left px-4 py-4 text-base transition-colors hover:bg-white/10 ${category === c.value ? 'bg-purple-500/20 text-purple-300' : 'text-white'}`}
+                  >
+                    {c.label}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Description */}
