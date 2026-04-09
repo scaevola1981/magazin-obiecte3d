@@ -182,7 +182,7 @@ export default function AdminPage() {
           </div>
 
           {/* Category Dropdown Custom */}
-          <div className="relative">
+          <div className="relative z-50">
             <label className="text-white/50 text-xs uppercase tracking-widest font-bold mb-2 block">Categorie *</label>
             <button
               type="button"
