@@ -205,7 +205,7 @@ export default async function Home({
 
           {/* Hero / Banner Area */}
           <section className="mt-0 px-12 py-10">
-             {(activeTab === 'trending' && topProduct) ? (
+             {activeTab === 'trending' && topProduct && (
                <div className="relative h-[320px] rounded-2xl overflow-hidden group">
                   <img 
                     src={topProduct.thumbnailUrl} 
@@ -229,7 +229,9 @@ export default async function Home({
                     </button>
                   </div>
                </div>
-             ) : (
+             )}
+             
+             {(!topProduct || activeTab !== 'trending') && (
                <div className="bg-white/5 border border-white/10 rounded-2xl p-8 flex flex-col gap-6">
                   <div className="flex items-center justify-between">
                     <div>
