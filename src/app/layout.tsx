@@ -34,7 +34,7 @@ export default function RootLayout({
           <MobileNav />
         </Suspense>
         {/* Grain Texture Overlay */}
-        <div className="fixed inset-0 pointer-events-none z-[9998] opacity-[0.03] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] brightness-100 contrast-150"></div>
+        <div className="fixed inset-0 pointer-events-none z-[9998] opacity-[0.03] bg-[url('/noise.svg')] brightness-100 contrast-150"></div>
         {children}
       </body>
     </html>
