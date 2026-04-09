@@ -8,7 +8,11 @@ if (rawUrl && !rawUrl.startsWith('http')) {
 const supabaseUrl = rawUrl.replace(/\/$/, '');
 const supabaseAnonKey = (process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '').trim();
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  global: {
+    fetch: (url, options) => fetch(url, { ...options, cache: 'no-store' })
+  }
+});
 
 /**
  * Diagnostic helper to identify configuration issues at runtime.
