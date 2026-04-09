@@ -1,3 +1,6 @@
+'use client';
+import { motion } from 'framer-motion';
+
 interface Product {
   id: string;
   name: string;
@@ -17,7 +20,12 @@ export default function MobileProductCard({ product }: Props) {
   const waNumber = process.env.NEXT_PUBLIC_WA_NUMBER;
 
   return (
-    <div className="bg-surface-low rounded-2xl overflow-hidden border border-white/5 shadow-lg">
+    <motion.div 
+      layout
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="bg-surface-low rounded-2xl overflow-hidden border border-white/5 shadow-lg"
+    >
       <div className="relative aspect-[4/3] overflow-hidden">
         <img
           src={product.thumbnailUrl}
@@ -44,6 +52,6 @@ export default function MobileProductCard({ product }: Props) {
           Cere pe WhatsApp
         </a>
       </div>
-    </div>
+    </motion.div>
   );
 }

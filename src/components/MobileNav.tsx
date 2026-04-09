@@ -1,41 +1,96 @@
 'use client';
 
-import { Home, Search, PlusSquare, ShoppingBag, User } from 'lucide-react';
+import { Home, Search, X } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 export default function MobileNav() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [isSearching, setIsSearching] = useState(false);
+  const [searchValue, setSearchValue] = useState(searchParams.get('q') || '');
+
+  // Sync URL → local state (when URL changes externally, e.g. from desktop sidebar)
+  useEffect(() => {
+    const urlQuery = searchParams.get('q') || '';
+    setSearchValue(urlQuery);
+  }, [searchParams]);
+
+  // Local state → URL (debounced, only triggered by user typing)
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      const currentUrlQuery = searchParams.get('q') || '';
+      if (searchValue === currentUrlQuery) return; // already in sync, skip
+
+      const params = new URLSearchParams(searchParams.toString());
+      if (searchValue) {
+        params.set('q', searchValue);
+      } else {
+        params.delete('q');
+      }
+      router.replace(`?${params.toString()}`, { scroll: false });
+    }, 300);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchValue]); // ← only searchValue, NOT searchParams (avoids stale closure re-push)
+
+  const handleHomeClick = () => {
+    setIsSearching(false);
+    setSearchValue('');
+    router.push('/', { scroll: false });
+  };
+
   return (
     <div className="fixed bottom-0 left-0 w-full z-[100] md:hidden px-4 pb-8">
-      <div className="bg-black/80 backdrop-blur-2xl border border-white/10 rounded-full h-16 flex items-center justify-around px-2 relative overflow-hidden shadow-[0_-10px_40px_rgba(0,0,0,0.5)]">
+      <div className={`bg-black/90 backdrop-blur-3xl border border-white/10 rounded-full h-16 flex items-center transition-all duration-500 shadow-[0_-10px_40px_rgba(0,0,0,0.5)] ${isSearching ? 'px-6 gap-3' : 'justify-center gap-20 px-2'}`}>
         {/* Neon Indicator Background */}
-        <div className="absolute inset-0 bg-linear-to-b from-primary/5 to-transparent pointer-events-none"></div>
+        <div className="absolute inset-0 bg-linear-to-b from-primary/5 to-transparent pointer-events-none rounded-full"></div>
         
-        {/* HUD Scanner Line (Static) */}
-        <div className="absolute top-0 left-0 w-full h-[1px] bg-linear-to-r from-transparent via-secondary/30 to-transparent"></div>
+        {!isSearching ? (
+          <>
+            <button 
+              onClick={handleHomeClick}
+              className={`flex flex-col items-center justify-center w-12 h-12 transition-colors ${!searchParams.get('q') && !isSearching ? 'text-secondary' : 'text-white/40'}`}
+            >
+              <Home size={20} />
+              <span className="text-[7px] font-display font-bold uppercase tracking-widest mt-1">Home</span>
+              {!searchParams.get('q') && <div className="w-1 h-1 bg-secondary rounded-full mt-1 animate-pulse"></div>}
+            </button>
 
-        <button className="flex flex-col items-center justify-center w-12 h-12 text-secondary group">
-          <Home size={20} />
-          <span className="text-[7px] font-display font-bold uppercase tracking-widest mt-1">Home</span>
-          <div className="w-1 h-1 bg-secondary rounded-full mt-1 animate-pulse"></div>
-        </button>
-
-        <button className="flex flex-col items-center justify-center w-12 h-12 text-white/40 hover:text-white transition-colors">
-          <Search size={20} />
-          <span className="text-[7px] font-display font-bold uppercase tracking-widest mt-1">Search</span>
-        </button>
-
-        <button className="flex flex-col items-center justify-center w-14 h-14 bg-primary text-black rounded-full -mt-6 shadow-[0_0_20px_rgba(211,148,255,0.4)] active:scale-90 transition-transform">
-          <PlusSquare size={24} />
-        </button>
-
-        <button className="flex flex-col items-center justify-center w-12 h-12 text-white/40 hover:text-white transition-colors">
-          <ShoppingBag size={20} />
-          <span className="text-[7px] font-display font-bold uppercase tracking-widest mt-1">Orders</span>
-        </button>
-
-        <button className="flex flex-col items-center justify-center w-12 h-12 text-white/40 hover:text-white transition-colors">
-          <User size={20} />
-          <span className="text-[7px] font-display font-bold uppercase tracking-widest mt-1">Profile</span>
-        </button>
+            <button 
+              onClick={() => setIsSearching(true)}
+              className={`flex flex-col items-center justify-center w-12 h-12 transition-colors ${searchParams.get('q') ? 'text-primary' : 'text-white/40 hover:text-white'}`}
+            >
+              <Search size={20} />
+              <span className="text-[7px] font-display font-bold uppercase tracking-widest mt-1">Search</span>
+              {searchParams.get('q') && <div className="w-1 h-1 bg-primary rounded-full mt-1 animate-pulse"></div>}
+            </button>
+          </>
+        ) : (
+          <div className="flex-1 flex items-center gap-3 animate-in fade-in slide-in-from-bottom-2 duration-300">
+             <Search size={18} className="text-primary shrink-0" />
+             <input 
+               autoFocus
+               type="text"
+               placeholder="Search blueprints..."
+               value={searchValue}
+               onChange={(e) => setSearchValue(e.target.value)}
+               className="flex-1 bg-transparent border-none text-sm text-white placeholder:text-white/40 focus:ring-0 outline-hidden h-full"
+             />
+             <button 
+              onClick={() => {
+                setIsSearching(false);
+                setSearchValue('');
+                const params = new URLSearchParams(searchParams.toString());
+                params.delete('q');
+                router.replace(`?${params.toString()}`, { scroll: false });
+              }}
+              className="p-1 hover:bg-white/10 rounded-full text-white/40 transition-colors"
+             >
+                <X size={18} />
+             </button>
+          </div>
+        )}
       </div>
     </div>
   );

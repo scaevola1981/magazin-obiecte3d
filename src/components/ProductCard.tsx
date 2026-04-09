@@ -19,7 +19,12 @@ export default function ProductCard({ product, index }: ProductCardProps) {
   };
 
   return (
-    <div
+    <motion.div
+      layout
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.95 }}
+      transition={{ duration: 0.3, delay: index * 0.05 }}
       className="group flex flex-col bg-[#111111] border border-white/5 rounded-xl overflow-hidden hover:border-white/10 transition-all duration-300 min-h-[300px]"
     >
       {/* Image Container */}
@@ -81,9 +86,9 @@ export default function ProductCard({ product, index }: ProductCardProps) {
           onClick={handleWhatsAppOrder}
           className="mt-auto w-full py-2.5 bg-white/5 border border-white/5 hover:border-primary hover:bg-primary/5 text-white/40 hover:text-primary text-[10px] font-display font-black uppercase tracking-[0.2em] rounded-lg transition-all"
         >
-          Details & Order
+          Comanda Acum
         </button>
       </div>
-    </div>
+    </motion.div>
   );
 }

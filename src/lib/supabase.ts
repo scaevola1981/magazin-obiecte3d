@@ -6,15 +6,18 @@ if (rawUrl && !rawUrl.startsWith('http')) {
   rawUrl = `https://${rawUrl}`;
 }
 const supabaseUrl = rawUrl.replace(/\/$/, '');
-const supabaseAnonKey = (process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '').trim();
+const supabaseAnonKey = (process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '').trim();
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-// Masked diagnostic helper for debugging
+/**
+ * Diagnostic helper to identify configuration issues at runtime.
+ */
 export const getSupabaseConfigStatus = () => ({
   hasUrl: !!supabaseUrl,
   urlStart: supabaseUrl ? supabaseUrl.substring(0, 15) + '...' : 'MISSING',
   hasKey: !!supabaseAnonKey,
   keyLength: supabaseAnonKey.length,
-  isHttps: supabaseUrl.startsWith('https://')
+  isHttps: supabaseUrl.startsWith('https://'),
+  isValidHost: supabaseUrl.includes('.supabase.co')
 });

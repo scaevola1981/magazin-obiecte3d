@@ -29,7 +29,7 @@ function normalizeSupabaseUrl(url: string | undefined | null): string {
   const cleanUrl = String(url).trim();
   
   // Use a hardcoded fallback if the environment variable is missing
-  const activeBaseUrl = supabaseBaseUrl || 'https://socqbkfurzfbxqqwijnnd.supabase.co';
+  const activeBaseUrl = supabaseBaseUrl || 'https://soqcbkfurzfxbqqwijnnd.supabase.co';
   
   // Replace any Supabase hostname with the correct one
   if (cleanUrl.includes('.supabase.co')) {
@@ -73,104 +73,4 @@ export function mapDbToProduct(dbProduct: DbProduct): Product {
   };
 }
 
-export const products: Product[] = [
-  {
-    id: "local-1",
-    name: "Cat Planter",
-    price: "45 RON",
-    modelUrl: "https://modelviewer.dev/shared-assets/models/Astronaut.glb",
-    thumbnailUrl: "/products/cat-planter.jpg",
-    description: "A cute feline-inspired planter for your succulents.",
-    creator: { name: "Printly", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=cat", verified: true },
-    stats: { downloads: "124", likes: "56" },
-    category: "Household"
-  },
-  {
-    id: "local-2",
-    name: "Highland Cow",
-    price: "65 RON",
-    modelUrl: "https://modelviewer.dev/shared-assets/models/Astronaut.glb",
-    thumbnailUrl: "/products/highland-cow.jpg",
-    description: "Detailed 3D model of a majestic Highland Cow.",
-    creator: { name: "Printly", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=cow", verified: true },
-    stats: { downloads: "89", likes: "42" },
-    category: "Art"
-  },
-  {
-    id: "local-3",
-    name: "Hydroponic Kit",
-    price: "120 RON",
-    modelUrl: "https://modelviewer.dev/shared-assets/models/Astronaut.glb",
-    thumbnailUrl: "/products/hydroponic-kit.jpg",
-    description: "Functional 3D printed hydroponic system for indoor gardening.",
-    creator: { name: "Printly", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=garden", verified: true },
-    stats: { downloads: "215", likes: "98" },
-    category: "Tools"
-  },
-  {
-    id: "local-4",
-    name: "Knit Swing",
-    price: "35 RON",
-    modelUrl: "https://modelviewer.dev/shared-assets/models/Astronaut.glb",
-    thumbnailUrl: "/products/knit-swing.jpg",
-    description: "Decorative knit-texture swing for small plants or figures.",
-    creator: { name: "Printly", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=swing", verified: true },
-    stats: { downloads: "67", likes: "23" },
-    category: "Household"
-  },
-  {
-    id: "local-5",
-    name: "Ribbed Cream",
-    price: "50 RON",
-    modelUrl: "https://modelviewer.dev/shared-assets/models/Astronaut.glb",
-    thumbnailUrl: "/products/ribbed-cream.jpg",
-    description: "Elegant ribbed vase with a cream finish look.",
-    creator: { name: "Printly", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=vase", verified: true },
-    stats: { downloads: "143", likes: "76" },
-    category: "Household"
-  },
-  {
-    id: "local-6",
-    name: "Ribbed Duo",
-    price: "85 RON",
-    modelUrl: "https://modelviewer.dev/shared-assets/models/Astronaut.glb",
-    thumbnailUrl: "/products/ribbed-duo.jpg",
-    description: "Set of two matching ribbed decorative items.",
-    creator: { name: "Printly", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=duo", verified: true },
-    stats: { downloads: "92", likes: "48" },
-    category: "Household"
-  },
-  {
-    id: "local-7",
-    name: "Spiral Planter",
-    price: "55 RON",
-    modelUrl: "https://modelviewer.dev/shared-assets/models/Astronaut.glb",
-    thumbnailUrl: "/products/spiral-planter.jpg",
-    description: "Modern spiral design planter.",
-    creator: { name: "Printly", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=spiral", verified: true },
-    stats: { downloads: "110", likes: "54" },
-    category: "Household"
-  },
-  {
-    id: "local-8",
-    name: "Twist Planter",
-    price: "55 RON",
-    modelUrl: "https://modelviewer.dev/shared-assets/models/Astronaut.glb",
-    thumbnailUrl: "/products/twist-planter.jpg",
-    description: "Another variation of twisted architectural planter.",
-    creator: { name: "Printly", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=twist", verified: true },
-    stats: { downloads: "105", likes: "51" },
-    category: "Household"
-  },
-  {
-    id: "local-9",
-    name: "Yellow Reader",
-    price: "30 RON",
-    modelUrl: "https://modelviewer.dev/shared-assets/models/Astronaut.glb",
-    thumbnailUrl: "/products/yellow-reader.jpg",
-    description: "Small yellow 3D printed figure for book lovers.",
-    creator: { name: "Printly", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=book", verified: true },
-    stats: { downloads: "45", likes: "19" },
-    category: "Art"
-  }
-];
+export const products: Product[] = [];

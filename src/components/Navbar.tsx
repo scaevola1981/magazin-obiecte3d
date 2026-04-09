@@ -16,7 +16,7 @@ export default function Navbar() {
   }, []);
 
   return (
-    <nav className={`fixed top-0 left-0 w-full z-[100] py-4 md:py-6 px-6 md:px-12 flex justify-between items-center transition-all duration-500 overflow-hidden`}>
+    <nav className={`sticky top-0 z-[40] py-4 md:py-6 px-6 md:px-12 flex justify-between items-center transition-all duration-500 overflow-hidden`}>
       {/* Background HUD Glass Layer */}
       <div className={`absolute inset-0 transition-all duration-500 ${isScrolled ? 'bg-black/80 backdrop-blur-2xl border-b border-white/5 opacity-100' : 'bg-transparent opacity-0'}`}></div>
 
