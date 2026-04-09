@@ -1,7 +1,7 @@
 'use client';
 
 import { Home, Search, X } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 export default function MobileNav() {
@@ -10,17 +10,32 @@ export default function MobileNav() {
   const [isSearching, setIsSearching] = useState(false);
   const [searchValue, setSearchValue] = useState(searchParams.get('q') || '');
 
-  // Sync URL → local state (when URL changes externally, e.g. from desktop sidebar)
+  // Secret admin tap counter (5 taps on the nav bar edge)
+  const tapCount = useRef(0);
+  const tapTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleSecretTap = () => {
+    tapCount.current += 1;
+    if (tapTimer.current) clearTimeout(tapTimer.current);
+    if (tapCount.current >= 5) {
+      tapCount.current = 0;
+      router.push('/admin');
+    } else {
+      tapTimer.current = setTimeout(() => { tapCount.current = 0; }, 1500);
+    }
+  };
+
+  // Sync URL → local state
   useEffect(() => {
     const urlQuery = searchParams.get('q') || '';
     setSearchValue(urlQuery);
   }, [searchParams]);
 
-  // Local state → URL (debounced, only triggered by user typing)
+  // Local state → URL (debounced)
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
       const currentUrlQuery = searchParams.get('q') || '';
-      if (searchValue === currentUrlQuery) return; // already in sync, skip
+      if (searchValue === currentUrlQuery) return;
 
       const params = new URLSearchParams(searchParams.toString());
       if (searchValue) {
@@ -32,7 +47,7 @@ export default function MobileNav() {
     }, 300);
 
     return () => clearTimeout(delayDebounceFn);
-  }, [searchValue]); // ← only searchValue, NOT searchParams (avoids stale closure re-push)
+  }, [searchValue]);
 
   const handleHomeClick = () => {
     setIsSearching(false);
@@ -45,10 +60,20 @@ export default function MobileNav() {
       <div className={`bg-black/90 backdrop-blur-3xl border border-white/10 rounded-full h-16 flex items-center transition-all duration-500 shadow-[0_-10px_40px_rgba(0,0,0,0.5)] ${isSearching ? 'px-6 gap-3' : 'justify-center gap-20 px-2'}`}>
         {/* Neon Indicator Background */}
         <div className="absolute inset-0 bg-linear-to-b from-primary/5 to-transparent pointer-events-none rounded-full"></div>
-        
+
+        {/* Secret admin tap zone — invisible, top-right corner of nav bar */}
+        {!isSearching && (
+          <button
+            onClick={handleSecretTap}
+            aria-hidden="true"
+            className="absolute right-4 top-0 w-8 h-8 opacity-0"
+            tabIndex={-1}
+          />
+        )}
+
         {!isSearching ? (
           <>
-            <button 
+            <button
               onClick={handleHomeClick}
               className={`flex flex-col items-center justify-center w-12 h-12 transition-colors ${!searchParams.get('q') && !isSearching ? 'text-secondary' : 'text-white/40'}`}
             >
@@ -57,7 +82,7 @@ export default function MobileNav() {
               {!searchParams.get('q') && <div className="w-1 h-1 bg-secondary rounded-full mt-1 animate-pulse"></div>}
             </button>
 
-            <button 
+            <button
               onClick={() => setIsSearching(true)}
               className={`flex flex-col items-center justify-center w-12 h-12 transition-colors ${searchParams.get('q') ? 'text-primary' : 'text-white/40 hover:text-white'}`}
             >
@@ -69,7 +94,7 @@ export default function MobileNav() {
         ) : (
           <div className="flex-1 flex items-center gap-3 animate-in fade-in slide-in-from-bottom-2 duration-300">
              <Search size={18} className="text-primary shrink-0" />
-             <input 
+             <input
                autoFocus
                type="text"
                placeholder="Search blueprints..."
@@ -77,7 +102,7 @@ export default function MobileNav() {
                onChange={(e) => setSearchValue(e.target.value)}
                className="flex-1 bg-transparent border-none text-sm text-white placeholder:text-white/40 focus:ring-0 outline-hidden h-full"
              />
-             <button 
+             <button
               onClick={() => {
                 setIsSearching(false);
                 setSearchValue('');
