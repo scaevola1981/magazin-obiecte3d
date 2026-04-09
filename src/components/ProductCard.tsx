@@ -1,7 +1,8 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { ThumbsUp, Download, CheckCircle2, Box } from 'lucide-react';
+import { ThumbsUp, Download, CheckCircle2, Box, Loader2 } from 'lucide-react';
 import { Product } from '@/data/products';
 
 interface ProductCardProps {
@@ -10,12 +11,47 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product, index }: ProductCardProps) {
+  const [likes, setLikes] = useState(product.stats.likes);
+  const [hasLiked, setHasLiked] = useState(false);
+  const [isLiking, setIsLiking] = useState(false);
+
+  useEffect(() => {
+    // Check if user already liked this product previously
+    const liked = localStorage.getItem(`liked-${product.id}`);
+    if (liked) setHasLiked(true);
+  }, [product.id]);
+
   const handleWhatsAppOrder = () => {
     const message = `Salut! Vreau să comand ${product.name} (${product.price}).`;
     const encodedMessage = encodeURIComponent(message);
     const waNumber = process.env.NEXT_PUBLIC_WA_NUMBER || "40700000000";
     const whatsappUrl = `https://wa.me/${waNumber}?text=${encodedMessage}`;
     window.open(whatsappUrl, '_blank');
+  };
+
+  const handleLike = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (hasLiked || isLiking) return;
+    setIsLiking(true);
+
+    try {
+      setLikes(prev => prev + 1); // Optimistic UI update
+      setHasLiked(true);
+      localStorage.setItem(`liked-${product.id}`, 'true');
+
+      const res = await fetch('/api/products/like', {
+        method: 'POST',
+        body: JSON.stringify({ productId: product.id })
+      });
+      if (!res.ok) throw new Error('Like failed');
+    } catch (err) {
+      // Rollback on failure
+      setLikes(prev => prev - 1);
+      setHasLiked(false);
+      localStorage.removeItem(`liked-${product.id}`);
+    } finally {
+      setIsLiking(false);
+    }
   };
 
   return (
@@ -69,14 +105,18 @@ export default function ProductCard({ product, index }: ProductCardProps) {
 
             {/* Stats */}
             <div className="flex items-center gap-3 text-white/30 text-[10px] font-bold">
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-1 cursor-help title-='Număr de comenzi la acest produs'">
                 <Download size={12} />
                 <span>{product.stats.downloads}</span>
               </div>
-              <div className="flex items-center gap-1">
-                <ThumbsUp size={12} />
-                <span>{product.stats.likes}</span>
-              </div>
+              <button 
+                onClick={handleLike}
+                disabled={hasLiked || isLiking}
+                className={`flex items-center gap-1 transition-colors ${hasLiked ? 'text-purple-400' : 'hover:text-purple-400 disabled:opacity-50'}`}
+              >
+                {isLiking ? <Loader2 size={12} className="animate-spin" /> : <ThumbsUp size={12} className={hasLiked ? 'fill-purple-400' : ''} />}
+                <span>{likes}</span>
+              </button>
             </div>
           </div>
         </div>

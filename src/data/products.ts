@@ -11,8 +11,8 @@ export interface Product {
     verified: boolean;
   };
   stats: {
-    downloads: string;
-    likes: string;
+    downloads: number;
+    likes: number;
   };
   category: string;
 }
@@ -50,6 +50,8 @@ interface DbProduct {
   thumbnail_url?: string | null;
   description?: string | null;
   tags?: string[] | null;
+  likes?: number | null;
+  orders?: number | null;
 }
 
 export function mapDbToProduct(dbProduct: DbProduct): Product {
@@ -66,8 +68,8 @@ export function mapDbToProduct(dbProduct: DbProduct): Product {
       verified: false
     },
     stats: {
-      downloads: "0",
-      likes: "0"
+      downloads: dbProduct.orders || 0,
+      likes: dbProduct.likes || 0
     },
     category: dbProduct.tags && dbProduct.tags.length > 0 ? dbProduct.tags[0] : "General"
   };

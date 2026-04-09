@@ -67,6 +67,14 @@ export default async function Home({
     products = [...products].reverse();
   } else if (activeTab === 'categories') {
     products = [...products].sort((a, b) => a.category.localeCompare(b.category));
+  } else {
+    // Default to 'trending' - sort by likes descending
+    products = [...products].sort((a, b) => {
+      // Prioritize likes. If likes are equal, fallback to downloads. Give extra weight to downloads.
+      const scoreA = (a.stats?.likes || 0) * 2 + (a.stats?.downloads || 0);
+      const scoreB = (b.stats?.likes || 0) * 2 + (b.stats?.downloads || 0);
+      return scoreB - scoreA;
+    });
   }
 
   // Filter by category

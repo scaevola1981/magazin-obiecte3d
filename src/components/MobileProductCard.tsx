@@ -1,13 +1,8 @@
 'use client';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-
-interface Product {
-  id: string;
-  name: string;
-  price: string;
-  thumbnailUrl: string;
-  description: string;
-}
+import { ThumbsUp, Download, Loader2 } from 'lucide-react';
+import { Product } from '@/data/products';
 
 interface Props {
   product: Product;
@@ -18,6 +13,39 @@ export default function MobileProductCard({ product }: Props) {
     `Salut! Vreau să comand ${product.name} (${product.price}).`
   );
   const waNumber = process.env.NEXT_PUBLIC_WA_NUMBER;
+
+  const [likes, setLikes] = useState(product.stats?.likes || 0);
+  const [hasLiked, setHasLiked] = useState(false);
+  const [isLiking, setIsLiking] = useState(false);
+
+  useEffect(() => {
+    const liked = localStorage.getItem(`liked-${product.id}`);
+    if (liked) setHasLiked(true);
+  }, [product.id]);
+
+  const handleLike = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (hasLiked || isLiking) return;
+    setIsLiking(true);
+
+    try {
+      setLikes(prev => prev + 1);
+      setHasLiked(true);
+      localStorage.setItem(`liked-${product.id}`, 'true');
+
+      const res = await fetch('/api/products/like', {
+        method: 'POST',
+        body: JSON.stringify({ productId: product.id })
+      });
+      if (!res.ok) throw new Error('Like failed');
+    } catch (err) {
+      setLikes(prev => prev - 1);
+      setHasLiked(false);
+      localStorage.removeItem(`liked-${product.id}`);
+    } finally {
+      setIsLiking(false);
+    }
+  };
 
   return (
     <motion.div 
@@ -42,9 +70,25 @@ export default function MobileProductCard({ product }: Props) {
             {product.price}
           </span>
         </div>
-        <p className="text-xs text-white/60 leading-relaxed">
+        <p className="text-xs text-white/60 leading-relaxed line-clamp-2 min-h-[32px]">
           {product.description}
         </p>
+
+        {/* Stats Row */}
+        <div className="flex items-center gap-4 text-white/30 text-xs font-bold mt-1">
+          <div className="flex items-center gap-1.5">
+            <Download size={14} />
+            <span>{product.stats?.downloads || 0}</span>
+          </div>
+          <button 
+            onClick={handleLike}
+            disabled={hasLiked || isLiking}
+            className={`flex items-center gap-1.5 transition-colors ${hasLiked ? 'text-purple-400' : 'hover:text-purple-400 disabled:opacity-50'}`}
+          >
+            {isLiking ? <Loader2 size={14} className="animate-spin" /> : <ThumbsUp size={14} className={hasLiked ? 'fill-purple-400' : ''} />}
+            <span>{likes}</span>
+          </button>
+        </div>
         <a
           href={`https://wa.me/${waNumber}?text=${message}`}
           className="mt-2 inline-flex items-center justify-center w-full px-4 py-3 text-sm font-display font-bold uppercase tracking-[0.2em] bg-primary text-black rounded-xl hover:-translate-y-[1px] transition"
