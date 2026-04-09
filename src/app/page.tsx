@@ -95,6 +95,13 @@ export default async function Home({
   const allProducts = Array.from(productsMap.values());
   const categoryList = ['all', ...new Set(allProducts.map(p => p.category.toLowerCase()))];
 
+  // Find the absolute most popular product for the Hero section
+  const topProduct = [...allProducts].sort((a, b) => {
+    const scoreA = (a.stats?.likes || 0) * 2 + (a.stats?.downloads || 0);
+    const scoreB = (b.stats?.likes || 0) * 2 + (b.stats?.downloads || 0);
+    return scoreB - scoreA;
+  })[0];
+
   return (
     <main className="min-h-screen bg-[#000000] text-white font-sans selection:bg-primary selection:text-black">
       {/* Mobile layout (Remains mostly same but slightly adjusted) */}
@@ -106,21 +113,42 @@ export default async function Home({
           </div>
         </div>
 
-        <div className="relative rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
-          <img
-            src="https://images.unsplash.com/photo-1503389152951-9f343605f61e?q=80&w=1400&auto=format&fit=crop"
-            alt="Hero print"
-            className="w-full h-64 object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent"></div>
-          <div className="absolute inset-0 p-6 flex flex-col justify-end gap-3">
-            <div className="text-xs font-display uppercase tracking-[0.35em] text-secondary">Community Picks</div>
-            <h1 className="text-3xl font-display font-black leading-tight">Print Your Reality</h1>
-            <p className="text-sm text-white/70 italic">
-              Blueprints for the future, ready to print today.
-            </p>
+        {topProduct ? (
+          <div className="relative rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
+            <img
+              src={topProduct.thumbnailUrl}
+              alt={topProduct.name}
+              className="w-full h-64 object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent"></div>
+            <div className="absolute inset-0 p-6 flex flex-col justify-end gap-3">
+              <div className="flex items-center gap-2 text-xs font-display uppercase tracking-[0.35em] text-purple-400">
+                <Star size={14} className="fill-purple-400" />
+                Community Pick
+              </div>
+              <h1 className="text-3xl font-display font-black leading-tight line-clamp-2">{topProduct.name}</h1>
+              <p className="text-sm text-white/70 italic line-clamp-2 break-words">
+                {topProduct.description || "Cel mai apreciat model de către comunitate chiar acum."}
+              </p>
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className="relative rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
+            <img
+              src="https://images.unsplash.com/photo-1503389152951-9f343605f61e?q=80&w=1400&auto=format&fit=crop"
+              alt="Hero print"
+              className="w-full h-64 object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent"></div>
+            <div className="absolute inset-0 p-6 flex flex-col justify-end gap-3">
+              <div className="text-xs font-display uppercase tracking-[0.35em] text-secondary">Community Picks</div>
+              <h1 className="text-3xl font-display font-black leading-tight">Print Your Reality</h1>
+              <p className="text-sm text-white/70 italic">
+                Blueprints for the future, ready to print today.
+              </p>
+            </div>
+          </div>
+        )}
 
         <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-2">
           {categoryList.map((cat) => {
@@ -177,31 +205,31 @@ export default async function Home({
 
           {/* Hero / Banner Area */}
           <section className="mt-0 px-12 py-10">
-             {activeTab === 'trending' ? (
+             {(activeTab === 'trending' && topProduct) ? (
                <div className="relative h-[320px] rounded-2xl overflow-hidden group">
                   <img 
-                    src="https://images.unsplash.com/photo-1635514562733-bd77da3b22cf?q=80&w=2000&auto=format&fit=crop" 
+                    src={topProduct.thumbnailUrl} 
                     className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" 
-                    alt="Featured model" 
+                    alt={topProduct.name} 
                   />
-                  <div className="absolute inset-0 bg-linear-to-r from-black/80 via-black/20 to-transparent"></div>
+                  <div className="absolute inset-0 bg-linear-to-r from-black/80 via-black/40 to-transparent"></div>
                   <div className="absolute inset-0 p-12 flex flex-col justify-center">
-                    <div className="flex items-center gap-3 text-primary text-xs font-bold uppercase tracking-[0.4em] mb-4">
-                      <Star size={16} />
-                      Featured: Kinetic Atelier
+                    <div className="flex items-center gap-3 text-purple-400 text-xs font-bold uppercase tracking-[0.4em] mb-4">
+                      <Star size={16} className="fill-purple-400" />
+                      Community Pick
                     </div>
-                    <h2 className="text-6xl font-display font-black leading-tight uppercase tracking-tighter text-white mb-6">
-                      KINETIC <br /> ATELIER_01
+                    <h2 className="text-5xl font-display font-black leading-tight uppercase tracking-tighter text-white mb-4 line-clamp-2 max-w-2xl">
+                      {topProduct.name}
                     </h2>
-                    <p className="max-w-md text-white/60 text-sm font-medium leading-relaxed uppercase tracking-wider mb-8">
-                      Discover new possibilities in 3D fabrication with our curated selection of high-precision blueprints.
+                    <p className="max-w-md text-white/60 text-sm font-medium leading-relaxed mb-8 line-clamp-3">
+                      {topProduct.description || "Descoperă cele mai apreciate și comandate planuri și produse 3D din comunitate."}
                     </p>
-                    <button className="w-fit px-8 py-4 bg-primary text-black font-display font-bold text-xs uppercase tracking-widest rounded-lg hover:bg-white transition-all">
-                      Explore Blueprint
+                    <button className="w-fit px-8 py-4 bg-purple-500 text-white font-display font-bold text-xs uppercase tracking-widest rounded-lg hover:bg-purple-400 transition-all">
+                      Vezi Produsul
                     </button>
                   </div>
                </div>
-             ) : (
+             ) : activeTab === 'trending' ? (
                <div className="bg-white/5 border border-white/10 rounded-2xl p-8 flex flex-col gap-6">
                   <div className="flex items-center justify-between">
                     <div>
