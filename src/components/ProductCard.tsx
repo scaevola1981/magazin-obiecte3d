@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ThumbsUp, Download, CheckCircle2, Box, Loader2 } from 'lucide-react';
 import { Product } from '@/data/products';
+import OrderModal from './OrderModal';
 
 interface ProductCardProps {
   product: Product;
@@ -14,6 +15,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
   const [likes, setLikes] = useState(product.stats.likes);
   const [hasLiked, setHasLiked] = useState(false);
   const [isLiking, setIsLiking] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     // Check if user already liked this product previously
@@ -21,12 +23,9 @@ export default function ProductCard({ product, index }: ProductCardProps) {
     if (liked) setHasLiked(true);
   }, [product.id]);
 
-  const handleWhatsAppOrder = () => {
-    const message = `Salut! Vreau să comand ${product.name} (${product.price}).`;
-    const encodedMessage = encodeURIComponent(message);
-    const waNumber = process.env.NEXT_PUBLIC_WA_NUMBER || "40700000000";
-    const whatsappUrl = `https://wa.me/${waNumber}?text=${encodedMessage}`;
-    window.open(whatsappUrl, '_blank');
+  const handleWhatsAppOrder = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsModalOpen(true);
   };
 
   const handleLike = async (e: React.MouseEvent) => {
@@ -129,6 +128,12 @@ export default function ProductCard({ product, index }: ProductCardProps) {
           Comanda Acum
         </button>
       </div>
+      <OrderModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+        product={product} 
+        waNumber="40770636284" 
+      />
     </motion.div>
   );
 }

@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ThumbsUp, Download, Loader2 } from 'lucide-react';
 import { Product } from '@/data/products';
+import OrderModal from './OrderModal';
 
 interface Props {
   product: Product;
@@ -17,6 +18,7 @@ export default function MobileProductCard({ product }: Props) {
   const [likes, setLikes] = useState(product.stats?.likes || 0);
   const [hasLiked, setHasLiked] = useState(false);
   const [isLiking, setIsLiking] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const liked = localStorage.getItem(`liked-${product.id}`);
@@ -89,13 +91,20 @@ export default function MobileProductCard({ product }: Props) {
             <span>{likes}</span>
           </button>
         </div>
-        <a
-          href={`https://wa.me/${waNumber}?text=${message}`}
+        <button
+          onClick={() => setIsModalOpen(true)}
           className="mt-2 inline-flex items-center justify-center w-full px-4 py-3 text-sm font-display font-bold uppercase tracking-[0.2em] bg-primary text-black rounded-xl hover:-translate-y-[1px] transition"
         >
           Cere pe WhatsApp
-        </a>
+        </button>
       </div>
+      
+      <OrderModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+        product={product} 
+        waNumber="40770636284" 
+      />
     </motion.div>
   );
 }

@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import { Upload, Plus, CheckCircle, XCircle, Loader2, Lock, Image as ImageIcon, ChevronDown } from 'lucide-react';
+import { Upload, Plus, CheckCircle, XCircle, Loader2, Lock, Image as ImageIcon, ChevronDown, Package } from 'lucide-react';
+import AdminOrders from './AdminOrders';
 
 const CATEGORIES = [
   { value: 'planter', label: '🪴 Planter / Ghivece' },
@@ -24,6 +25,7 @@ export default function AdminPage() {
   const [status, setStatus] = useState<'idle' | 'uploading' | 'saving' | 'success' | 'error'>('idle');
   const [message, setMessage] = useState('');
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
+  const [adminTab, setAdminTab] = useState<'products' | 'orders'>('products');
   const fileRef = useRef<HTMLInputElement>(null);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -117,17 +119,25 @@ export default function AdminPage() {
   return (
     <div className="min-h-screen bg-black text-white p-4 pb-16">
       <div className="max-w-lg mx-auto">
-        {/* Header */}
-        <div className="flex items-center gap-3 mb-8 pt-4">
-          <div className="w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center">
-            <Plus size={16} className="text-purple-400" />
-          </div>
-          <div>
-            <h1 className="text-white font-bold text-lg">Adaugă Produs</h1>
-            <p className="text-white/30 text-xs">Printly Admin Panel</p>
-          </div>
+        {/* Header Tabs */}
+        <div className="flex items-center gap-6 mb-8 pt-4 border-b border-white/10">
+          <button 
+            onClick={() => setAdminTab('products')}
+            className={`flex items-center gap-2 pb-4 text-sm font-bold border-b-2 transition-colors ${adminTab === 'products' ? 'border-purple-500 text-white' : 'border-transparent text-white/50 hover:text-white/80'}`}
+          >
+            <Plus size={16} /> Produse Noi
+          </button>
+          <button 
+            onClick={() => setAdminTab('orders')}
+            className={`flex items-center gap-2 pb-4 text-sm font-bold border-b-2 transition-colors ${adminTab === 'orders' ? 'border-purple-500 text-white' : 'border-transparent text-white/50 hover:text-white/80'}`}
+          >
+            <Package size={16} /> Comenzi
+          </button>
         </div>
 
+        {adminTab === 'orders' ? (
+          <AdminOrders />
+        ) : (
         <form onSubmit={handleSubmit} className="flex flex-col gap-5">
           {/* Image Upload */}
           <div>
@@ -248,6 +258,7 @@ export default function AdminPage() {
             )}
           </button>
         </form>
+        )}
       </div>
     </div>
   );
