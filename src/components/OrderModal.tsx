@@ -14,6 +14,7 @@ interface OrderModalProps {
 export default function OrderModal({ isOpen, onClose, product, waNumber }: OrderModalProps) {
   const [name, setName] = useState('');
   const [notes, setNotes] = useState('');
+  const [gdprAccepted, setGdprAccepted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
 
@@ -43,8 +44,11 @@ export default function OrderModal({ isOpen, onClose, product, waNumber }: Order
         throw new Error('Nu s-a putut salva comanda. Vă rugăm să ne contactați direct.');
       }
 
+      const data = await res.json();
+      const orderId = data?.order?.id || 'NOUĂ';
+
       // Generate WhatsApp message
-      let message = `Salut! Sunt ${name.trim()} și aș dori să comand "${product.name}" (${product.price}).`;
+      let message = `Salut! Sunt ${name.trim()} și am înregistrat automat comanda #${orderId} pentru "${product.name}".`;
       if (notes.trim()) {
         message += `\n\nDetalii extra din formular: ${notes.trim()}`;
       }
@@ -131,10 +135,24 @@ export default function OrderModal({ isOpen, onClose, product, waNumber }: Order
                   />
                 </div>
 
+                <div className="flex items-start gap-2 pt-2 mb-4">
+                  <input 
+                      type="checkbox" 
+                      id="gdpr" 
+                      required
+                      checked={gdprAccepted}
+                      onChange={(e) => setGdprAccepted(e.target.checked)}
+                      className="mt-1 bg-[#111] border-white/20 rounded focus:ring-purple-500 accent-purple-500 cursor-pointer"
+                  />
+                  <label htmlFor="gdpr" className="text-white/40 text-[10px] leading-tight select-none cursor-pointer">
+                    Am citit și sunt de acord cu <a href="#" target="_blank" className="text-purple-400 hover:text-purple-300 underline">Politica de Confidențialitate</a>. Înțeleg că datele mele (nume și număr de telefon) vor fi procesate prin WhatsApp pentru onorarea comenzii.
+                  </label>
+                </div>
+
                 <div className="pt-2">
                   <button
                     type="submit"
-                    disabled={isSubmitting || !name.trim()}
+                    disabled={isSubmitting || !name.trim() || !gdprAccepted}
                     className="w-full relative group overflow-hidden bg-[#25D366] text-black font-display font-bold text-sm uppercase tracking-widest px-6 py-4 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed hover:scale-[1.02] transition-transform flex items-center justify-center gap-2"
                   >
                     <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></div>

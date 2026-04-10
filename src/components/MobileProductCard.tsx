@@ -7,9 +7,10 @@ import OrderModal from './OrderModal';
 
 interface Props {
   product: Product;
+  viewType?: 'grid' | 'list';
 }
 
-export default function MobileProductCard({ product }: Props) {
+export default function MobileProductCard({ product, viewType = 'list' }: Props) {
   const message = encodeURIComponent(
     `Salut! Vreau să comand ${product.name} (${product.price}).`
   );
@@ -52,34 +53,38 @@ export default function MobileProductCard({ product }: Props) {
   return (
     <motion.div 
       layout
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="bg-surface-low rounded-2xl overflow-hidden border border-white/5 shadow-lg"
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.95 }}
+      className={`relative bg-[#111111] rounded-2xl overflow-hidden border border-white/5 light-mode:border-black shadow-lg ${viewType === 'list' ? 'flex flex-row items-stretch' : 'flex flex-col'}`}
     >
-      <div className="relative aspect-[4/3] overflow-hidden">
+      <motion.div layout className={`relative overflow-hidden shrink-0 bg-[#0A0A0A] light-mode:!bg-gray-100 ${viewType === 'list' ? 'w-[35%] aspect-square border-r border-white/5 light-mode:!border-black' : 'w-full aspect-[4/3] border-b border-white/5 light-mode:!border-black'}`}>
         <img
           src={product.thumbnailUrl}
           alt={product.name}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
         />
-      </div>
-      <div className="p-4 flex flex-col gap-2">
-        <div className="flex justify-between items-center">
-          <h3 className="text-base font-display font-bold tracking-tight">
+      </motion.div>
+      <div className={`flex flex-col ${viewType === 'list' ? 'p-4 w-[65%] gap-2' : 'p-3 gap-2 flex-1'}`}>
+        <div className="flex justify-between items-start gap-2">
+          <motion.h3 layout className={`font-display font-bold tracking-tight line-clamp-2 ${viewType === 'list' ? 'text-base md:text-lg' : 'text-xs'}`}>
             {product.name}
-          </h3>
-          <span className="text-sm text-secondary font-semibold">
+          </motion.h3>
+          <motion.span layout className={`text-secondary light-mode:text-blue-600 font-black shrink-0 ${viewType === 'list' ? 'text-sm md:text-base' : 'text-[10px]'}`}>
             {product.price}
-          </span>
+          </motion.span>
         </div>
-        <p className="text-xs text-white/60 leading-relaxed line-clamp-2 min-h-[32px]">
-          {product.description}
-        </p>
+        
+        {viewType === 'list' && (
+          <motion.p layout className="text-xs md:text-sm text-white/50 light-mode:!text-black light-mode:!font-black leading-relaxed line-clamp-3">
+            {product.description}
+          </motion.p>
+        )}
 
         {/* Stats Row */}
-        <div className="flex items-center gap-4 text-white/30 text-xs font-bold mt-1">
+        <motion.div layout className="flex items-center gap-3 text-white/30 light-mode:!text-black text-xs md:text-sm light-mode:!font-black font-bold mt-auto pt-1">
           <div className="flex items-center gap-1.5">
-            <Download size={14} />
+            <Download size={12} />
             <span>{product.stats?.downloads || 0}</span>
           </div>
           <button 
@@ -87,23 +92,36 @@ export default function MobileProductCard({ product }: Props) {
             disabled={hasLiked || isLiking}
             className={`flex items-center gap-1.5 transition-colors ${hasLiked ? 'text-purple-400' : 'hover:text-purple-400 disabled:opacity-50'}`}
           >
-            {isLiking ? <Loader2 size={14} className="animate-spin" /> : <ThumbsUp size={14} className={hasLiked ? 'fill-purple-400' : ''} />}
+            {isLiking ? <Loader2 size={12} className="animate-spin" /> : <ThumbsUp size={12} className={hasLiked ? 'fill-purple-400' : ''} />}
             <span>{likes}</span>
           </button>
-        </div>
+        </motion.div>
+
+        {viewType === 'grid' && (
+          <motion.button 
+            layout
+            onClick={() => setIsModalOpen(true)}
+            className="mt-2 w-full py-2 text-[10px] font-display font-bold uppercase tracking-[0.2em] rounded-lg text-white bg-[#980ffa] hover:bg-[#a82ffb] hover:shadow-[0_0_16px_#980ffa] transition-all duration-200"
+          >
+            Comandă
+          </motion.button>
+        )}
+      </div>
+      
+      {viewType === 'list' && (
         <button
           onClick={() => setIsModalOpen(true)}
-          className="mt-2 inline-flex items-center justify-center w-full px-4 py-3 text-sm font-display font-bold uppercase tracking-[0.2em] bg-primary text-black rounded-xl hover:-translate-y-[1px] transition"
+          className="absolute bottom-3 right-3 px-4 py-2 text-[9px] font-display font-black uppercase tracking-[0.2em] bg-[#980ffa] text-white rounded-lg hover:bg-[#a82ffb] hover:shadow-[0_0_16px_#980ffa] hover:scale-[1.02] transition-all duration-200 shadow-lg"
         >
-          Cere pe WhatsApp
+          Comandă
         </button>
-      </div>
+      )}
       
       <OrderModal 
         isOpen={isModalOpen} 
         onClose={() => setIsModalOpen(false)} 
         product={product} 
-        waNumber="40770636284" 
+        waNumber={process.env.NEXT_PUBLIC_WA_NUMBER || '40765181199'} 
       />
     </motion.div>
   );

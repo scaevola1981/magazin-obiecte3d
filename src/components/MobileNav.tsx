@@ -1,8 +1,9 @@
 'use client';
 
-import { Home, Search, X, Grid, MessageCircle } from 'lucide-react';
+import { Home, Search, X, Grid, MessageCircle, Settings } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import SettingsModal from './SettingsModal';
 
 export default function MobileNav() {
   const router = useRouter();
@@ -10,6 +11,7 @@ export default function MobileNav() {
   const waNumber = process.env.NEXT_PUBLIC_WA_NUMBER || '40765181199';
   const [isSearching, setIsSearching] = useState(false);
   const [searchValue, setSearchValue] = useState(searchParams.get('q') || '');
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
   // Secret admin tap counter (5 taps on the nav bar edge)
   const tapCount = useRef(0);
@@ -57,7 +59,7 @@ export default function MobileNav() {
   };
 
   return (
-    <div className="fixed bottom-0 left-0 w-full z-[100] md:hidden px-4 pb-8">
+    <div className="fixed bottom-0 left-0 w-full z-[100] md:hidden px-4 pb-2">
       <div className={`bg-black/90 backdrop-blur-3xl border border-white/10 rounded-full h-16 flex items-center transition-all duration-500 shadow-[0_-10px_40px_rgba(0,0,0,0.5)] ${isSearching ? 'px-6 gap-3' : 'justify-around px-2'}`}>
         {/* Neon Indicator Background */}
         <div className="absolute inset-0 bg-linear-to-b from-primary/5 to-transparent pointer-events-none rounded-full"></div>
@@ -103,6 +105,14 @@ export default function MobileNav() {
               <span className="text-[7px] font-display font-bold uppercase tracking-widest mt-1">Search</span>
               {searchParams.get('q') && <div className="w-1 h-1 bg-primary rounded-full mt-1 animate-pulse absolute bottom-1"></div>}
             </button>
+
+            <button
+              onClick={() => setIsSettingsOpen(true)}
+              className="flex flex-col items-center justify-center w-12 h-12 transition-colors text-white/40 hover:text-white"
+            >
+              <Settings size={20} />
+              <span className="text-[7px] font-display font-bold uppercase tracking-widest mt-1">Setări</span>
+            </button>
           </>
         ) : (
           <div className="flex-1 flex items-center gap-3 animate-in fade-in slide-in-from-bottom-2 duration-300">
@@ -130,6 +140,11 @@ export default function MobileNav() {
           </div>
         )}
       </div>
+
+      <SettingsModal 
+        isOpen={isSettingsOpen} 
+        onClose={() => setIsSettingsOpen(false)} 
+      />
     </div>
   );
 }

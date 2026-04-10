@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@custom-variant light-mode (&:where(.light-mode, .light-mode *));
 
 @theme {
   --font-display: var(--font-space-grotesk);
@@ -15,15 +16,49 @@
   --color-surface-high: #201F1F;
 }
 
+html.light-mode {
+  --color-surface: #FFFFFF;
+  --color-surface-low: #F3F4F6;
+  --color-surface-lowest: #F9FAFB;
+  --color-surface-high: #E5E7EB;
+}
+
 @layer base {
   body {
-    @apply bg-surface-lowest text-white font-sans antialiased;
+    @apply bg-[var(--color-surface-lowest)] text-white font-sans antialiased transition-colors duration-500;
     background-image:
       radial-gradient(circle at 50% -20%, rgba(211, 148, 255, 0.05) 0%, transparent 50%),
       radial-gradient(circle at 0% 100%, rgba(0, 227, 253, 0.03) 0%, transparent 40%),
       radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px);
     background-size: auto, auto, 32px 32px;
     background-position: center, center, -2px -2px;
+  }
+
+  html.light-mode body {
+    color: #000000 !important;
+    background-image:
+      radial-gradient(circle at 50% -20%, rgba(211, 148, 255, 0.15) 0%, transparent 50%),
+      radial-gradient(circle at 0% 100%, rgba(0, 227, 253, 0.1) 0%, transparent 40%),
+      radial-gradient(circle, rgba(0,0,0,0.05) 1px, transparent 1px);
+  }
+
+  html.light-mode .text-white {
+    color: #000000 !important;
+  }
+
+  html.light-mode .bg-\[\#000000\], 
+  html.light-mode .bg-\[\#111111\], 
+  html.light-mode .bg-\[\#0A0A0A\],
+  html.light-mode .bg-\[\#050505\],
+  html.light-mode .bg-surface-low {
+    background-color: #ffffff !important;
+  }
+
+  html.reduced-motion * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -85,4 +120,18 @@
 #custom-cursor::after {
   content: '';
   @apply w-1 h-1 bg-secondary rounded-full;
+}
+
+/* Magenta Neon Button */
+.btn-magenta-neon {
+  background: #d946ef;
+  color: #ffffff;
+  border: 1px solid #d946ef;
+  transition: background 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.btn-magenta-neon:hover,
+.btn-magenta-neon:active {
+  background: #e879f9;
+  border-color: #f0abfc;
+  box-shadow: 0 0 20px #ff00ff, 0 0 8px #ff00ff;
 }

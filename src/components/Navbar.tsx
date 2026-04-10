@@ -3,9 +3,11 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Search, ShoppingCart, User, Menu } from 'lucide-react';
+import CustomOrderModal from './CustomOrderModal';
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isCustomOrderOpen, setIsCustomOrderOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -28,7 +30,7 @@ export default function Navbar() {
         <Link href="/" className="flex items-center gap-3">
           <div className="w-2 h-2 bg-secondary rounded-full animate-pulse"></div>
           <span className="text-xl md:text-2xl font-display font-black tracking-tighter uppercase whitespace-nowrap text-white">
-            BLOOM<span className="text-secondary">FORM</span>
+            BLOOM<span className="bg-[linear-gradient(135deg,#ff00ff,#ff1493)] bg-clip-text text-transparent">FORM</span>
           </span>
         </Link>
 
@@ -49,12 +51,12 @@ export default function Navbar() {
             <button className="hover:text-secondary transition-colors"><User size={18} /></button>
           </div>
 
-          <Link
-            href={process.env.NEXT_PUBLIC_WA_NUMBER ? `https://wa.me/${process.env.NEXT_PUBLIC_WA_NUMBER}` : "https://wa.me/40700000000"}
+          <button
+            onClick={() => setIsCustomOrderOpen(true)}
             className="px-6 py-2 border border-secondary text-secondary hover:bg-secondary hover:text-black transition-all duration-500 font-display font-bold text-[9px] uppercase tracking-[0.2em] relative overflow-hidden group hidden md:block"
           >
-            <span className="relative z-10">Comandă WA</span>
-          </Link>
+            <span className="relative z-10">Printare la Comandă</span>
+          </button>
 
           {/* Mobile Menu Toggle (only if needed, but we have bottom nav now) */}
           <button className="lg:hidden text-white/60 hover:text-white">
@@ -62,6 +64,7 @@ export default function Navbar() {
           </button>
         </div>
       </div>
+      <CustomOrderModal isOpen={isCustomOrderOpen} onClose={() => setIsCustomOrderOpen(false)} />
     </nav>
   );
 }

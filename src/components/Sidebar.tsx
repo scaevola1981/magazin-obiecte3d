@@ -6,14 +6,20 @@ import {
   Search,
   X,
   Settings,
-  HelpCircle
+  HelpCircle,
+  MessageCircle
 } from 'lucide-react';
+import SettingsModal from './SettingsModal';
+import CustomOrderModal from './CustomOrderModal';
 
 export default function Sidebar() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isSearching, setIsSearching] = useState(false);
   const [searchValue, setSearchValue] = useState(searchParams.get('q') || '');
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isCustomOrderOpen, setIsCustomOrderOpen] = useState(false);
+  const waNumber = process.env.NEXT_PUBLIC_WA_NUMBER || '40765181199';
 
   // Sync URL → local state (when URL changes externally, e.g. from mobile nav)
   useEffect(() => {
@@ -46,14 +52,14 @@ export default function Sidebar() {
   };
 
   return (
-    <aside className="hidden lg:flex flex-col w-64 h-screen fixed left-0 top-0 bg-[#0A0A0A] border-r border-white/5 z-50 pt-6">
+    <aside className="hidden lg:flex flex-col w-64 h-screen fixed left-0 top-0 bg-[#0A0A0A] light-mode:!bg-gray-50 border-r border-white/5 light-mode:!border-black/10 z-50 pt-3">
       {/* Brand Logo */}
       <div className="px-6 mb-10 flex items-center gap-3">
-        <div className="w-8 h-8 rounded-lg bg-linear-to-br from-primary to-secondary flex items-center justify-center">
+        <div className="w-8 h-8 rounded-lg bg-[linear-gradient(135deg,#ff00ff,hsl(30,100%,50%))] border border-white/20 light-mode:!border-black/20 flex items-center justify-center">
           <div className="w-4 h-4 bg-black rounded-sm rotate-45"></div>
         </div>
-        <span className="text-xl font-display font-black tracking-tighter uppercase text-white hover:cursor-pointer" onClick={handleHomeClick}>
-          BLOOM<span className="text-secondary">FORM</span>
+        <span className="text-xl font-display font-black tracking-tighter uppercase text-white light-mode:!text-black hover:cursor-pointer" onClick={handleHomeClick}>
+          BLOOM<span className="bg-[linear-gradient(135deg,#ff00ff,#ff1493)] bg-clip-text text-transparent">FORM</span>
         </span>
       </div>
 
@@ -62,20 +68,20 @@ export default function Sidebar() {
           {/* Home Link */}
           <button
             onClick={handleHomeClick}
-            className={`flex items-center gap-3 w-full px-4 py-3 rounded-xl text-sm font-medium transition-all group ${!searchParams.get('q') && !isSearching ? 'text-white bg-white/5' : 'text-white/60 hover:text-white hover:bg-white/5'}`}
+            className={`flex items-center gap-3 w-full px-4 py-3 rounded-xl text-sm font-medium transition-all group ${!searchParams.get('q') && !isSearching ? 'text-white bg-white/5 light-mode:!bg-black/5 light-mode:!text-black' : 'text-white/60 hover:text-white hover:bg-white/5 light-mode:!text-black/60 light-mode:hover:!text-black light-mode:hover:!bg-black/5'}`}
           >
             <Home size={20} className={`${!searchParams.get('q') && !isSearching ? 'text-primary' : 'group-hover:text-primary'} transition-colors`} />
-            <span>Home</span>
+            <span>Acasa</span>
           </button>
 
           {/* Search Button / Input */}
           {!isSearching && !searchParams.get('q') ? (
             <button
               onClick={() => setIsSearching(true)}
-              className="flex items-center gap-3 w-full px-4 py-3 rounded-xl text-sm font-medium text-white/60 hover:text-white hover:bg-white/5 transition-all group"
+              className="flex items-center gap-3 w-full px-4 py-3 rounded-xl text-sm font-medium text-white/60 hover:text-white hover:bg-white/5 light-mode:!text-black/60 light-mode:hover:!text-black light-mode:hover:!bg-black/5 transition-all group"
             >
               <Search size={20} className="group-hover:text-secondary transition-colors" />
-              <span>Search</span>
+              <span>Cauta</span>
             </button>
           ) : (
             <div className="flex items-center gap-3 px-4 py-2 rounded-xl bg-white/5 border border-white/10 mx-1">
@@ -93,7 +99,7 @@ export default function Sidebar() {
                     e.currentTarget.blur();
                   }
                 }}
-                className="flex-1 bg-transparent border-none text-sm text-white placeholder:text-white/40 focus:ring-0 outline-hidden h-8"
+                className="flex-1 bg-transparent border-none text-sm text-white light-mode:!text-black placeholder:text-white/40 light-mode:placeholder:!text-black/40 focus:ring-0 outline-hidden h-8"
               />
               <button 
                 onClick={() => {
@@ -109,8 +115,36 @@ export default function Sidebar() {
               </button>
             </div>
           )}
+          {/* Custom Order Button - WhatsApp */}
+          <button
+            onClick={() => setIsCustomOrderOpen(true)}
+            className="flex items-center gap-3 w-full px-4 py-3 rounded-xl text-sm font-medium text-fuchsia-500 light-mode:!text-fuchsia-600 hover:text-fuchsia-400 hover:bg-purple-500/20 light-mode:hover:!bg-purple-600/10 group transition-all"
+          >
+            <div className="bg-purple-500/10 p-1.5 rounded-lg border border-purple-500/30 group-hover:bg-purple-500 group-hover:border-purple-500 transition-colors">
+              <MessageCircle size={16} className="text-purple-400 group-hover:text-white" />
+            </div>
+            <span className="transition-colors">Printare la comanda</span>
+          </button>
+
+          {/* Settings Button */}
+          <button
+            onClick={() => setIsSettingsOpen(true)}
+            className="flex items-center gap-3 w-full px-4 py-3 rounded-xl text-sm font-medium text-white/60 hover:text-white hover:bg-white/5 light-mode:!text-black/60 light-mode:hover:!text-black light-mode:hover:!bg-black/5 transition-all group"
+          >
+            <Settings size={20} className="transition-colors" />
+            <span>Setări</span>
+          </button>
         </div>
       </nav>
+
+      <SettingsModal 
+        isOpen={isSettingsOpen} 
+        onClose={() => setIsSettingsOpen(false)} 
+      />
+      <CustomOrderModal
+        isOpen={isCustomOrderOpen}
+        onClose={() => setIsCustomOrderOpen(false)}
+      />
     </aside>
   );
 }

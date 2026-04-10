@@ -1,5 +1,5 @@
 import ProductCard from '@/components/ProductCard';
-import MobileProductCard from '@/components/MobileProductCard';
+import MobileProductGrid from '@/components/MobileProductGrid';
 import Sidebar from '../components/Sidebar';
 import Navbar from '@/components/Navbar';
 import Link from 'next/link';
@@ -105,11 +105,15 @@ export default async function Home({
   return (
     <main className="min-h-screen bg-[#000000] text-white font-sans selection:bg-primary selection:text-black">
       {/* Mobile layout (Remains mostly same but slightly adjusted) */}
-      <section className="lg:hidden px-4 pt-20 pb-28 flex flex-col gap-8 max-w-xl mx-auto">
+      <section className="lg:hidden px-4 md:px-8 pt-6 pb-20 flex flex-col gap-8 max-w-3xl mx-auto w-full">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-linear-to-br from-primary to-secondary"></div>
-            <div className="text-lg font-display font-bold tracking-tight">BLOOM<span className="text-secondary">FORM</span></div>
+            <div className="w-8 h-8 rounded-lg bg-[linear-gradient(135deg,#ff00ff,hsl(30,100%,50%))] border border-white/20 light-mode:!border-black/20 flex items-center justify-center">
+              <div className="w-4 h-4 bg-black rounded-sm rotate-45"></div>
+            </div>
+            <div className="text-xl font-display font-black tracking-tighter uppercase text-white light-mode:!text-black">
+              BLOOM<span className="bg-[linear-gradient(135deg,#ff00ff,#ff1493)] bg-clip-text text-transparent">FORM</span>
+            </div>
           </div>
         </div>
 
@@ -166,8 +170,8 @@ export default async function Home({
                 scroll={false}
                 className={`px-4 py-2 text-xs font-display font-bold uppercase tracking-[0.2em] rounded-full border whitespace-nowrap transition-colors ${
                   isActive 
-                    ? 'border-purple-500 bg-purple-500/20 text-purple-400' 
-                    : 'border-white/10 bg-white/5 text-white/80 hover:bg-white/10 hover:text-white'
+                    ? 'border-purple-500 bg-purple-500/20 text-purple-400 light-mode:!border-purple-600 light-mode:!bg-purple-600 light-mode:!text-white' 
+                    : 'border-white/10 bg-white/5 text-white/80 hover:bg-white/10 hover:text-white light-mode:!border-purple-300 light-mode:!bg-purple-100 light-mode:!text-purple-800 light-mode:hover:!bg-purple-200'
                 }`}
               >
                 {label}
@@ -176,22 +180,7 @@ export default async function Home({
           })}
         </div>
 
-        <div className="flex flex-col gap-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-display font-bold tracking-tight">Trending Models</h2>
-          </div>
-          <div data-product-count={products.length} className="flex flex-col gap-5">
-            {products.length > 0 ? (
-              products.map((product) => (
-                <MobileProductCard key={product.id} product={product} />
-              ))
-            ) : (
-              <div className="py-12 text-center">
-                <p className="text-white/40 text-sm font-display uppercase tracking-widest">Niciun model găsit pentru "{query}"</p>
-              </div>
-            )}
-          </div>
-        </div>
+        <MobileProductGrid products={products} query={query} />
       </section>
 
       {/* Desktop Dashboard Layout */}
@@ -266,8 +255,8 @@ export default async function Home({
           <section className="px-12 pb-24">
              <div className="flex flex-col gap-8">
                 {/* Filter Tabs */}
-                <div className="flex items-center justify-between border-b border-white/5">
-                   <div className="flex items-center gap-10">
+                <div className="flex items-center justify-between border-b border-white/5 pb-6">
+                   <div className="flex items-center gap-4">
                       {[
                         { icon: Flame, label: 'Trending', id: 'trending' },
                         { icon: Zap, label: 'Produse Noi', id: 'new' },
@@ -277,11 +266,14 @@ export default async function Home({
                           key={item.id} 
                           href={`/?tab=${item.id}${query ? `&q=${query}` : ''}`}
                           scroll={false}
-                          className={`flex items-center gap-2 pb-4 text-[11px] font-display font-bold uppercase tracking-[0.2em] relative transition-all ${activeTab === item.id ? 'text-primary' : 'text-white/40 hover:text-white'}`}
+                          className={`flex items-center gap-2 px-5 py-3 rounded-xl text-[11px] font-display font-bold uppercase tracking-[0.2em] transition-all ${
+                            activeTab === item.id 
+                              ? 'bg-purple-500/20 text-purple-400 light-mode:!bg-purple-600 light-mode:!text-white' 
+                              : 'bg-white/5 text-white/50 hover:bg-white/10 hover:text-white border border-white/5 light-mode:!bg-gray-100 light-mode:!border-black/5 light-mode:!text-black/60 light-mode:hover:!bg-gray-200 light-mode:hover:!text-black'
+                          }`}
                         >
-                          <item.icon size={14} />
+                          <item.icon size={16} className={activeTab === item.id && !('light-mode' in globalThis) ? "text-purple-400" : ""} />
                           {item.label}
-                          {activeTab === item.id && <div className="absolute bottom-0 left-0 w-full h-[2px] bg-primary"></div>}
                         </Link>
                       ))}
                    </div>
@@ -306,10 +298,10 @@ export default async function Home({
                         <a
                           key={cat}
                           href={href}
-                          className={`px-4 py-2 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all whitespace-nowrap ${
+                          className={`px-4 py-2 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all whitespace-nowrap border ${
                             isActive
-                              ? 'bg-white text-black'
-                              : 'bg-white/5 border border-white/10 text-white/40 hover:bg-white/10 hover:text-white'
+                              ? 'bg-white text-black border-transparent light-mode:!bg-purple-600 light-mode:!text-white light-mode:!border-purple-600'
+                              : 'bg-white/5 border-white/10 text-white/40 hover:bg-white/10 hover:text-white light-mode:!bg-purple-100 light-mode:!border-purple-300 light-mode:!text-purple-800 light-mode:hover:!bg-purple-200'
                           }`}
                         >
                           {label} <span className="opacity-50">({count})</span>
