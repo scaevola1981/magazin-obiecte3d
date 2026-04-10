@@ -4,6 +4,7 @@ import { Home, Search, X, Grid, MessageCircle, Settings } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import SettingsModal from './SettingsModal';
+import CustomOrderModal from './CustomOrderModal';
 
 export default function MobileNav() {
   const router = useRouter();
@@ -12,6 +13,7 @@ export default function MobileNav() {
   const [isSearching, setIsSearching] = useState(false);
   const [searchValue, setSearchValue] = useState(searchParams.get('q') || '');
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isCustomOrderOpen, setIsCustomOrderOpen] = useState(false);
 
   // Secret admin tap counter (5 taps on the nav bar edge)
   const tapCount = useRef(0);
@@ -86,16 +88,14 @@ export default function MobileNav() {
             </button>
 
             {/* Custom Order Button - Highlighted */}
-            <a
-              href={`https://wa.me/${waNumber}?text=Salut, vreau si eu o lucrare 3D la comanda. Putem discuta detaliile?`}
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              onClick={() => setIsCustomOrderOpen(true)}
               className="flex flex-col items-center justify-center w-12 h-12 transition-all hover:scale-110 text-white group"
             >
               <div className="bg-purple-500/20 p-2.5 rounded-full border border-purple-500 group-hover:bg-purple-500 transition-colors">
                 <MessageCircle size={18} className="text-purple-400 group-hover:text-white" />
               </div>
-            </a>
+            </button>
 
             <button
               onClick={() => setIsSearching(true)}
@@ -144,6 +144,10 @@ export default function MobileNav() {
       <SettingsModal 
         isOpen={isSettingsOpen} 
         onClose={() => setIsSettingsOpen(false)} 
+      />
+      <CustomOrderModal
+        isOpen={isCustomOrderOpen}
+        onClose={() => setIsCustomOrderOpen(false)}
       />
     </div>
   );
