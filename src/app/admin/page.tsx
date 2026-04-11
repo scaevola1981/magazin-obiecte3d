@@ -26,6 +26,7 @@ export default function AdminPage() {
   const [message, setMessage] = useState('');
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const [adminTab, setAdminTab] = useState<'products' | 'orders'>('products');
+  const [isDragging, setIsDragging] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,6 +34,26 @@ export default function AdminPage() {
     if (!file) return;
     setImageFile(file);
     setImagePreview(URL.createObjectURL(file));
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+    const file = e.dataTransfer.files?.[0];
+    if (file && file.type.startsWith('image/')) {
+      setImageFile(file);
+      setImagePreview(URL.createObjectURL(file));
+    }
   };
 
   const handleUnlock = (e: React.FormEvent) => {
@@ -144,7 +165,12 @@ export default function AdminPage() {
             <label className="text-white/50 text-xs uppercase tracking-widest font-bold mb-2 block">Fotografie</label>
             <div
               onClick={() => fileRef.current?.click()}
-              className="w-full aspect-video bg-white/5 border-2 border-dashed border-white/10 rounded-2xl flex flex-col items-center justify-center cursor-pointer hover:border-purple-500/50 transition-colors overflow-hidden"
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+              className={`w-full aspect-video bg-white/5 border-2 border-dashed rounded-2xl flex flex-col items-center justify-center cursor-pointer transition-all overflow-hidden ${
+                isDragging ? 'border-purple-500 bg-purple-500/10' : 'border-white/10 hover:border-purple-500/50 hover:bg-white/5'
+              }`}
             >
               {imagePreview ? (
                 <img src={imagePreview} alt="preview" className="w-full h-full object-cover" />

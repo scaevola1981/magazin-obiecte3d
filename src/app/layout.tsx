@@ -16,8 +16,24 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Printly • Print 3D la comandă",
+  title: "BLOOMFORM • Print 3D Pro",
   description: "Marketplace de printare 3D cu modele, materiale și comandă rapidă prin WhatsApp.",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "BloomForm",
+  },
+  formatDetection: {
+    telephone: false,
+  },
+};
+
+export const viewport = {
+  themeColor: "#050505",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
 };
 
 export default function RootLayout({

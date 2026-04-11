@@ -22,7 +22,18 @@ export async function POST(req: NextRequest) {
 
   const bytes = await file.arrayBuffer();
   const buffer = Buffer.from(bytes);
-  const fileName = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
+  
+  // Create a truly unique name: timestamp + random uuid + sanitized original name
+  const fileExt = file.name.split('.').pop() || 'jpg';
+  const cleanBaseName = file.name
+    .split('.')
+    .slice(0, -1)
+    .join('.')
+    .replace(/[^a-zA-Z0-9]/g, '_')
+    .toLowerCase();
+    
+  const uniqueId = crypto.randomUUID().slice(0, 8);
+  const fileName = `${Date.now()}-${uniqueId}-${cleanBaseName}.${fileExt}`;
 
   const { data, error } = await supabase.storage
     .from('obiecte-3d')
