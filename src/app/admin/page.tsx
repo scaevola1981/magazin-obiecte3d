@@ -1,7 +1,5 @@
-'use client';
-
-import { useState, useRef } from 'react';
-import { Upload, Plus, CheckCircle, XCircle, Loader2, Lock, Image as ImageIcon, ChevronDown, Package } from 'lucide-react';
+import { Upload, Plus, CheckCircle, XCircle, Loader2, Lock, Image as ImageIcon, ChevronDown, Package, ArrowLeft } from 'lucide-react';
+import Link from 'next/link';
 import AdminOrders from './AdminOrders';
 
 const CATEGORIES = [
@@ -115,9 +113,14 @@ export default function AdminPage() {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center p-6">
         <div className="w-full max-w-sm bg-white/5 border border-white/10 rounded-2xl p-8">
-          <div className="flex items-center gap-3 mb-8">
-            <Lock className="text-purple-400" size={24} />
-            <h1 className="text-white font-bold text-xl tracking-tight">Admin Panel</h1>
+          <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center gap-3">
+              <Lock className="text-purple-400" size={24} />
+              <h1 className="text-white font-bold text-xl tracking-tight">Admin Panel</h1>
+            </div>
+            <Link href="/" className="text-white/40 hover:text-white transition-colors">
+              <XCircle size={20} />
+            </Link>
           </div>
           <form onSubmit={handleUnlock} className="flex flex-col gap-4">
             <input
@@ -140,6 +143,15 @@ export default function AdminPage() {
   return (
     <div className="min-h-screen bg-black text-white p-4 pb-16">
       <div className="max-w-lg mx-auto">
+        {/* Back to Home Link */}
+        <Link 
+          href="/" 
+          className="inline-flex items-center gap-2 text-white/40 hover:text-white transition-colors mb-6 text-sm font-bold uppercase tracking-widest"
+        >
+          <ArrowLeft size={16} />
+          Inapoi la Magazin
+        </Link>
+
         {/* Header Tabs */}
         <div className="flex items-center gap-6 mb-8 pt-4 border-b border-white/10">
           <button 
