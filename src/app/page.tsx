@@ -39,23 +39,20 @@ export default async function Home({
     fetchError = err?.message || 'Unknown error';
   }
 
-  // Map and deduplicate database products by name + price
+  // Map and deduplicate database products by ID
   const productsMap = new Map();
   
   dbProducts.forEach(dbProduct => {
     const product = mapDbToProduct(dbProduct);
-    const key = `${product.name.trim().toLowerCase()}-${product.price}`;
-    
-    if (!productsMap.has(key)) {
-      productsMap.set(key, product);
+    // Use ID as key to ensure we don't accidentally merge products with same name/price
+    // but keep the latest/best version if same ID appears twice (unlikely but safe)
+    if (!productsMap.has(product.id)) {
+      productsMap.set(product.id, product);
     } else {
-      // If we have a duplicate, prioritize the one with a proper image URL
-      const currentHasImage = product.thumbnailUrl?.startsWith('http');
-      const existing = productsMap.get(key);
-      const existingHasImage = existing.thumbnailUrl?.startsWith('http');
-      
-      if (currentHasImage && !existingHasImage) {
-        productsMap.set(key, product);
+      const currentHasImage = product.thumbnailUrl && !product.thumbnailUrl.includes('placeholder');
+      const existing = productsMap.get(product.id);
+      if (currentHasImage && (!existing.thumbnailUrl || existing.thumbnailUrl.includes('placeholder'))) {
+        productsMap.set(product.id, product);
       }
     }
   });
