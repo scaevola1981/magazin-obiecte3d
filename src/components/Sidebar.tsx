@@ -9,6 +9,7 @@ import {
   HelpCircle,
   MessageCircle
 } from 'lucide-react';
+import { useRef } from 'react';
 import SettingsModal from './SettingsModal';
 import CustomOrderModal from './CustomOrderModal';
 
@@ -20,6 +21,21 @@ export default function Sidebar() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isCustomOrderOpen, setIsCustomOrderOpen] = useState(false);
   const waNumber = process.env.NEXT_PUBLIC_WA_NUMBER || '40765181199';
+
+  // Secret admin tap counter
+  const tapCount = useRef(0);
+  const tapTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleSecretTap = () => {
+    tapCount.current += 1;
+    if (tapTimer.current) clearTimeout(tapTimer.current);
+    if (tapCount.current >= 5) {
+      tapCount.current = 0;
+      router.push('/admin');
+    } else {
+      tapTimer.current = setTimeout(() => { tapCount.current = 0; }, 1500);
+    }
+  };
 
   // Sync URL → local state (when URL changes externally, e.g. from mobile nav)
   useEffect(() => {
@@ -46,6 +62,7 @@ export default function Sidebar() {
   }, [searchValue]); // ← only searchValue, NOT searchParams (avoids stale closure re-push)
 
   const handleHomeClick = () => {
+    handleSecretTap(); // Add to click count for admin access
     setIsSearching(false);
     setSearchValue('');
     router.push('/', { scroll: false });
@@ -63,8 +80,9 @@ export default function Sidebar() {
         </span>
       </div>
 
-      <nav className="flex-1 px-3 space-y-4 overflow-y-auto no-scrollbar">
-        <div className="space-y-2">
+      <nav className="flex-1 px-4 py-2 space-y-4 overflow-y-auto no-scrollbar">
+        {/* Navigation Group with Border */}
+        <div className="bg-white/5 border border-white/10 rounded-2xl p-2 space-y-1">
           {/* Home Link */}
           <button
             onClick={handleHomeClick}
@@ -95,7 +113,6 @@ export default function Sidebar() {
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
                     e.preventDefault();
-                    // Just blur to confirm search, the debounce handles the routing
                     e.currentTarget.blur();
                   }
                 }}
@@ -115,6 +132,7 @@ export default function Sidebar() {
               </button>
             </div>
           )}
+
           {/* Custom Order Button - WhatsApp */}
           <button
             onClick={() => setIsCustomOrderOpen(true)}
