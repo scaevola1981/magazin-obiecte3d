@@ -17,7 +17,7 @@ export default function Sidebar() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isSearching, setIsSearching] = useState(false);
-  const [searchValue, setSearchValue] = useState(searchParams.get('q') || '');
+  const [searchValue, setSearchValue] = useState('');
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isCustomOrderOpen, setIsCustomOrderOpen] = useState(false);
   const waNumber = process.env.NEXT_PUBLIC_WA_NUMBER || '40765181199';
@@ -80,7 +80,7 @@ export default function Sidebar() {
         </span>
       </div>
 
-      <nav className="flex-1 px-4 py-2 space-y-4 overflow-y-auto no-scrollbar">
+      <nav className="flex-1 px-3 py-2 space-y-4 overflow-y-auto no-scrollbar">
         {/* Navigation Group with Border */}
         <div className="bg-white/5 border border-white/10 rounded-2xl p-2 space-y-1">
           {/* Home Link */}
