@@ -1,3 +1,6 @@
+'use client';
+
+import { useState, useRef } from 'react';
 import { Upload, Plus, CheckCircle, XCircle, Loader2, Lock, Image as ImageIcon, ChevronDown, Package, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import AdminOrders from './AdminOrders';
