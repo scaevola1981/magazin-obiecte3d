@@ -32,8 +32,10 @@ export default function Sidebar() {
     if (tapCount.current >= 5) {
       tapCount.current = 0;
       router.push('/admin');
+      return true;
     } else {
       tapTimer.current = setTimeout(() => { tapCount.current = 0; }, 1500);
+      return false;
     }
   };
 
@@ -62,7 +64,9 @@ export default function Sidebar() {
   }, [searchValue]); // ← only searchValue, NOT searchParams (avoids stale closure re-push)
 
   const handleHomeClick = () => {
-    handleSecretTap(); // Add to click count for admin access
+    const isAdminAccess = handleSecretTap(); // Add to click count for admin access
+    if (isAdminAccess) return; // Prevent proceeding if we're navigating to admin
+
     setIsSearching(false);
     setSearchValue('');
     router.push('/', { scroll: false });
