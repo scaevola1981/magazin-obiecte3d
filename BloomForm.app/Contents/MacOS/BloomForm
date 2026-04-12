@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# Hardcoded project path for reliability
+PROJECT_DIR="/Users/florindorobantu/magazin-3d"
+
+# Navigate to the project directory
+cd "$PROJECT_DIR"
+
+# Check if port 3000 is already in use
+if lsof -Pi :3000 -sTCP:LISTEN -t >/dev/null ; then
+    # Server is already running
+    open "http://localhost:3000"
+else
+    # Start npm run dev in a new Terminal window
+    osascript -e 'tell application "Terminal" to do script "cd \"'$PROJECT_DIR'\" && npm run dev"'
+    
+    # Wait a few seconds for the server to initialize
+    sleep 5
+    open "http://localhost:3000"
+fi
+
+exit 0

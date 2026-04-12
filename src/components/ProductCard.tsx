@@ -76,8 +76,11 @@ export default function ProductCard({ product, index }: ProductCardProps) {
         </div>
 
         {/* Floating Price */}
-        <div className="absolute bottom-3 right-3 bg-primary/90 backdrop-blur-md text-black px-3 py-1 rounded-lg font-display font-black text-sm skew-x-[-10deg]">
-          {product.price}
+        <div className="absolute bottom-3 right-3 bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 skew-x-[-10deg]">
+          <div className="flex items-center gap-1 skew-x-[10deg]">
+            <span className="font-mono text-xl font-bold text-ag-accent">{product.price}</span>
+            <span className="font-mono text-xs text-ag-accent">RON</span>
+          </div>
         </div>
       </div>
 

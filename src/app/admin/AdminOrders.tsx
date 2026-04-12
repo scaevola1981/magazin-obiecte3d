@@ -1,6 +1,7 @@
 'use client';
-import { useState, useEffect } from 'react';
-import { Loader2, CheckCircle, Clock, Package } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { Loader2, CheckCircle, Clock, Package, Bell } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 type Order = {
   id: string;
@@ -18,24 +19,56 @@ type Order = {
 export default function AdminOrders() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [showToast, setShowToast] = useState(false);
+  const lastOrderIdRef = useRef<string | null>(null);
+  const isFirstLoadRef = useRef(true);
 
-  const fetchOrders = async () => {
-    setIsLoading(true);
+  const playNotificationSound = () => {
+    const audio = new Audio('https://www.soundjay.com/buttons/sounds/button-16.mp3');
+    audio.play().catch(err => console.log('Audio playback failed (interaction required):', err));
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 5000); // Auto-hide after 5 seconds
+  };
+
+  const fetchOrders = async (isPoll = false) => {
+    if (!isPoll) setIsLoading(true);
     try {
       const res = await fetch('/api/orders');
       const data = await res.json();
       if (data.orders) {
-        setOrders(data.orders);
+        const newOrders = data.orders;
+        
+        // Detect new orders if not the first load
+        if (!isFirstLoadRef.current && newOrders.length > 0) {
+          const latestId = newOrders[0].id;
+          if (latestId !== lastOrderIdRef.current) {
+            playNotificationSound();
+          }
+        }
+
+        if (newOrders.length > 0) {
+          lastOrderIdRef.current = newOrders[0].id;
+        }
+        
+        setOrders(newOrders);
+        isFirstLoadRef.current = false;
       }
     } catch (err) {
       console.error(err);
     } finally {
-      setIsLoading(false);
+      if (!isPoll) setIsLoading(false);
     }
   };
 
   useEffect(() => {
     fetchOrders();
+    
+    // Poll for new orders every 10 seconds
+    const interval = setInterval(() => {
+      fetchOrders(true);
+    }, 10000);
+
+    return () => clearInterval(interval);
   }, []);
 
   const updateStatus = async (id: string, newStatus: string) => {
@@ -67,7 +100,25 @@ export default function AdminOrders() {
   }
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 relative">
+      <AnimatePresence>
+        {showToast && (
+          <motion.div 
+            initial={{ opacity: 0, y: -20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            className="fixed top-24 left-1/2 -translate-x-1/2 z-50 bg-purple-600 text-white px-6 py-3 rounded-2xl shadow-2xl flex items-center gap-3 border border-purple-400/50 backdrop-blur-xl"
+          >
+            <div className="bg-white/20 p-2 rounded-full">
+              <Bell size={18} className="animate-bounce" />
+            </div>
+            <div>
+              <p className="font-bold text-sm">Comandă Nouă!</p>
+              <p className="text-[10px] opacity-80">Verifică lista de comenzi recent primite.</p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
       {orders.map((order) => (
         <div key={order.id} className="bg-white/5 border border-white/10 rounded-2xl p-4 flex flex-col gap-4">
           <div className="flex items-start justify-between gap-2">

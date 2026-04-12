@@ -48,7 +48,7 @@ export default function OrderModal({ isOpen, onClose, product, waNumber }: Order
       const orderId = data?.order?.id || 'NOUĂ';
 
       // Generate WhatsApp message
-      let message = `Salut! Sunt ${name.trim()} și am înregistrat automat comanda #${orderId} pentru "${product.name}".`;
+      let message = `Salut! Sunt ${name.trim()} și am înregistrat automat comanda #${orderId} pentru "${product.name}" (${product.price} RON).`;
       if (notes.trim()) {
         message += `\n\nDetalii extra din formular: ${notes.trim()}`;
       }
@@ -106,7 +106,10 @@ export default function OrderModal({ isOpen, onClose, product, waNumber }: Order
                 />
                 <div>
                   <h4 className="font-display font-bold text-white text-sm line-clamp-1">{product.name}</h4>
-                  <p className="text-purple-400 font-bold text-xs mt-1">{product.price}</p>
+                  <div className="flex items-center gap-1 mt-1">
+                    <span className="font-mono text-base font-bold text-ag-accent">{product.price}</span>
+                    <span className="font-mono text-[10px] text-ag-accent">RON</span>
+                  </div>
                 </div>
               </div>
 

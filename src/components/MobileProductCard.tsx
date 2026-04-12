@@ -12,7 +12,7 @@ interface Props {
 
 export default function MobileProductCard({ product, viewType = 'list' }: Props) {
   const message = encodeURIComponent(
-    `Salut! Vreau să comand ${product.name} (${product.price}).`
+    `Salut! Vreau să comand ${product.name} (${product.price} RON).`
   );
   const waNumber = process.env.NEXT_PUBLIC_WA_NUMBER;
 
@@ -70,9 +70,12 @@ export default function MobileProductCard({ product, viewType = 'list' }: Props)
           <motion.h3 layout className={`font-display font-bold tracking-tight line-clamp-2 ${viewType === 'list' ? 'text-base md:text-lg' : 'text-xs'}`}>
             {product.name}
           </motion.h3>
-          <motion.span layout className={`text-secondary light-mode:text-blue-600 font-black shrink-0 ${viewType === 'list' ? 'text-sm md:text-base' : 'text-[10px]'}`}>
-            {product.price}
-          </motion.span>
+          <motion.div layout className="shrink-0">
+            <div className="flex items-center gap-1">
+              <span className="font-mono text-base md:text-xl font-bold text-ag-accent">{product.price}</span>
+              <span className="font-mono text-[8px] md:text-xs text-ag-accent">RON</span>
+            </div>
+          </motion.div>
         </div>
         
         {viewType === 'list' && (

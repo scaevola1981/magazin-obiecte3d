@@ -274,14 +274,7 @@ export default async function Home({
                         </Link>
                       ))}
                    </div>
-                   <div className="flex items-center gap-4 mb-4">
-                      <span className="text-[10px] font-bold text-white/20 uppercase tracking-widest">Sort by:</span>
-                      <select className="bg-transparent border-none text-[10px] font-bold text-white/60 uppercase tracking-widest focus:ring-0 cursor-pointer">
-                        <option>Popularity</option>
-                        <option>Recent</option>
-                        <option>Downloads</option>
-                      </select>
-                   </div>
+
                 </div>
 
                 {/* Sub-tag Cloud — real categories from DB */}
