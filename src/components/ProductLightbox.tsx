@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, Variants } from 'framer-motion';
 import { X, ChevronLeft, ChevronRight, Maximize2 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
@@ -47,7 +47,7 @@ export default function ProductLightbox({ isOpen, onClose, images, initialIndex 
     setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
   };
 
-  const variants = {
+  const variants: Variants = {
     initial: (direction: number) => ({
       x: direction > 0 ? 300 : direction < 0 ? -300 : 0,
       opacity: 0,
