@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { ThumbsUp, Download, CheckCircle2, Box, Loader2 } from 'lucide-react';
+import { ThumbsUp, Download, CheckCircle2, Box, Loader2, Image as ImageIcon } from 'lucide-react';
 import { Product } from '@/data/products';
 import OrderModal from './OrderModal';
+import ProductLightbox from './ProductLightbox';
 
 interface ProductCardProps {
   product: Product;
@@ -16,6 +17,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
   const [hasLiked, setHasLiked] = useState(false);
   const [isLiking, setIsLiking] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
 
   useEffect(() => {
     // Check if user already liked this product previously
@@ -63,7 +65,10 @@ export default function ProductCard({ product, index }: ProductCardProps) {
       className="group flex flex-col bg-[#111111] border border-white/5 light-mode:!border-black/20 rounded-xl overflow-hidden hover:border-white/10 light-mode:hover:!border-black transition-all duration-300 min-h-[300px]"
     >
       {/* Image Container */}
-      <div className="relative aspect-[4/3] overflow-hidden bg-[#0A0A0A] light-mode:!bg-gray-100">
+      <div 
+        className="relative aspect-[4/3] overflow-hidden bg-[#0A0A0A] light-mode:!bg-gray-100 cursor-zoom-in"
+        onClick={() => setIsLightboxOpen(true)}
+      >
         <img 
           src={product.thumbnailUrl || '/placeholder-product.jpg'} 
           alt={product.name} 
@@ -74,6 +79,14 @@ export default function ProductCard({ product, index }: ProductCardProps) {
         <div className="absolute top-3 left-3 w-8 h-8 bg-black/60 backdrop-blur-md rounded-lg flex items-center justify-center border border-white/10">
           <Box size={16} className="text-primary" />
         </div>
+
+        {/* Gallery Indicator */}
+        {product.imageUrls.length > 1 && (
+          <div className="absolute top-3 right-3 bg-black/60 backdrop-blur-md text-white/70 text-[10px] px-2 py-1 rounded-md border border-white/10 font-bold flex items-center gap-1">
+            <ImageIcon size={10} />
+            {product.imageUrls.length}
+          </div>
+        )}
 
         {/* Floating Price */}
         <div className="absolute bottom-3 right-3 bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 skew-x-[-10deg]">
@@ -141,6 +154,11 @@ export default function ProductCard({ product, index }: ProductCardProps) {
         onClose={() => setIsModalOpen(false)} 
         product={product} 
         waNumber="40770636284" 
+      />
+      <ProductLightbox
+        isOpen={isLightboxOpen}
+        onClose={() => setIsLightboxOpen(false)}
+        images={product.imageUrls}
       />
     </motion.div>
   );

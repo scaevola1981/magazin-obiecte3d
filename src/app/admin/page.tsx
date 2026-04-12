@@ -21,8 +21,8 @@ export default function AdminPage() {
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
   const [category, setCategory] = useState('planter');
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [imageFiles, setImageFiles] = useState<File[]>([]);
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   const [status, setStatus] = useState<'idle' | 'uploading' | 'saving' | 'success' | 'error'>('idle');
   const [message, setMessage] = useState('');
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
@@ -31,10 +31,12 @@ export default function AdminPage() {
   const fileRef = useRef<HTMLInputElement>(null);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    setImageFile(file);
-    setImagePreview(URL.createObjectURL(file));
+    const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
+    
+    const newPreviews = files.map(file => URL.createObjectURL(file));
+    setImageFiles(prev => [...prev, ...files]);
+    setImagePreviews(prev => [...prev, ...newPreviews]);
   };
 
   const handleDragOver = (e: React.DragEvent) => {
@@ -50,11 +52,17 @@ export default function AdminPage() {
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(false);
-    const file = e.dataTransfer.files?.[0];
-    if (file && file.type.startsWith('image/')) {
-      setImageFile(file);
-      setImagePreview(URL.createObjectURL(file));
+    const files = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/'));
+    if (files.length > 0) {
+      const newPreviews = files.map(file => URL.createObjectURL(file));
+      setImageFiles(prev => [...prev, ...files]);
+      setImagePreviews(prev => [...prev, ...newPreviews]);
     }
+  };
+
+  const removeImage = (index: number) => {
+    setImageFiles(prev => prev.filter((_, i) => i !== index));
+    setImagePreviews(prev => prev.filter((_, i) => i !== index));
   };
 
   const handleUnlock = (e: React.FormEvent) => {
@@ -73,29 +81,33 @@ export default function AdminPage() {
     setStatus('uploading');
     setMessage('');
 
-    let thumbnailUrl = null;
+    const imageUrls: string[] = [];
 
-    // Step 1: upload image if selected
-    if (imageFile) {
-      const fd = new FormData();
-      fd.append('password', password);
-      fd.append('file', imageFile);
-      const uploadRes = await fetch('/api/admin/upload', { method: 'POST', body: fd });
-      const uploadData = await uploadRes.json();
-      if (!uploadRes.ok) {
-        setStatus('error');
-        setMessage(uploadData.error || 'Upload eșuat');
-        return;
+    // Step 1: upload all images
+    if (imageFiles.length > 0) {
+      for (const file of imageFiles) {
+        const fd = new FormData();
+        fd.append('password', password);
+        fd.append('file', file);
+        const uploadRes = await fetch('/api/admin/upload', { method: 'POST', body: fd });
+        const uploadData = await uploadRes.json();
+        if (!uploadRes.ok) {
+          setStatus('error');
+          setMessage(uploadData.error || 'Upload eșuat');
+          return;
+        }
+        imageUrls.push(uploadData.url);
       }
-      thumbnailUrl = uploadData.url;
     }
+
+    const thumbnailUrl = imageUrls.length > 0 ? imageUrls[0] : null;
 
     // Step 2: save product
     setStatus('saving');
     const res = await fetch('/api/admin/product', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ password, name, description, price, category, thumbnailUrl }),
+      body: JSON.stringify({ password, name, description, price, category, thumbnailUrl, imageUrls }),
     });
     const data = await res.json();
 
@@ -108,7 +120,7 @@ export default function AdminPage() {
     setStatus('success');
     setMessage(`✅ Produs "${name}" adăugat cu succes!`);
     setName(''); setDescription(''); setPrice(''); setCategory('planter');
-    setImageFile(null); setImagePreview(null);
+    setImageFiles([]); setImagePreviews([]);
     if (fileRef.current) fileRef.current.value = '';
   };
 
@@ -177,30 +189,46 @@ export default function AdminPage() {
         <form onSubmit={handleSubmit} className="flex flex-col gap-5">
           {/* Image Upload */}
           <div>
-            <label className="text-white/50 text-xs uppercase tracking-widest font-bold mb-2 block">Fotografie</label>
-            <div
-              onClick={() => fileRef.current?.click()}
-              onDragOver={handleDragOver}
-              onDragLeave={handleDragLeave}
-              onDrop={handleDrop}
-              className={`w-full aspect-video bg-white/5 border-2 border-dashed rounded-2xl flex flex-col items-center justify-center cursor-pointer transition-all overflow-hidden ${
-                isDragging ? 'border-purple-500 bg-purple-500/10' : 'border-white/10 hover:border-purple-500/50 hover:bg-white/5'
-              }`}
-            >
-              {imagePreview ? (
-                <img src={imagePreview} alt="preview" className="w-full h-full object-cover" />
-              ) : (
-                <div className="flex flex-col items-center gap-2 text-white/30">
-                  <ImageIcon size={32} />
-                  <span className="text-xs">Apasă pentru a alege foto</span>
+            <label className="text-white/50 text-xs uppercase tracking-widest font-bold mb-2 block">Fotografii (prima va fi coperta)</label>
+            <div className="grid grid-cols-2 gap-3 mb-3">
+              {imagePreviews.map((preview, idx) => (
+                <div key={idx} className="relative aspect-square rounded-xl overflow-hidden border border-white/10 group">
+                  <img src={preview} alt="" className="w-full h-full object-cover" />
+                  <button 
+                    type="button" 
+                    onClick={() => removeImage(idx)}
+                    className="absolute top-2 right-2 p-1.5 bg-black/60 backdrop-blur-md rounded-lg text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    <XCircle size={14} />
+                  </button>
+                  {idx === 0 && (
+                    <div className="absolute bottom-2 left-2 px-2 py-0.5 bg-purple-500/80 backdrop-blur-md rounded-md text-[8px] font-bold uppercase tracking-widest">
+                      Copertă
+                    </div>
+                  )}
                 </div>
-              )}
+              ))}
+              <div
+                onClick={() => fileRef.current?.click()}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
+                className={`aspect-square bg-white/5 border-2 border-dashed rounded-xl flex flex-col items-center justify-center cursor-pointer transition-all ${
+                  isDragging ? 'border-purple-500 bg-purple-500/10' : 'border-white/10 hover:border-purple-500/50 hover:bg-white/5'
+                }`}
+              >
+                <div className="flex flex-col items-center gap-1 text-white/30">
+                  <Plus size={20} />
+                  <span className="text-[10px]">Adaugă foto</span>
+                </div>
+              </div>
             </div>
+            
             <input
               ref={fileRef}
               type="file"
               accept="image/*"
-              capture="environment"
+              multiple
               onChange={handleImageChange}
               className="hidden"
             />

@@ -1,9 +1,10 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { ThumbsUp, Download, Loader2 } from 'lucide-react';
+import { ThumbsUp, Download, Loader2, Image as ImageIcon } from 'lucide-react';
 import { Product } from '@/data/products';
 import OrderModal from './OrderModal';
+import ProductLightbox from './ProductLightbox';
 
 interface Props {
   product: Product;
@@ -20,6 +21,7 @@ export default function MobileProductCard({ product, viewType = 'list' }: Props)
   const [hasLiked, setHasLiked] = useState(false);
   const [isLiking, setIsLiking] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
 
   useEffect(() => {
     const liked = localStorage.getItem(`liked-${product.id}`);
@@ -58,24 +60,35 @@ export default function MobileProductCard({ product, viewType = 'list' }: Props)
       exit={{ opacity: 0, scale: 0.95 }}
       className={`relative bg-[#111111] rounded-2xl overflow-hidden border border-white/5 light-mode:border-black shadow-lg ${viewType === 'list' ? 'flex flex-row items-stretch' : 'flex flex-col'}`}
     >
-      <motion.div layout className={`relative overflow-hidden shrink-0 bg-[#0A0A0A] light-mode:!bg-gray-100 ${viewType === 'list' ? 'w-[35%] aspect-square border-r border-white/5 light-mode:!border-black' : 'w-full aspect-[4/3] border-b border-white/5 light-mode:!border-black'}`}>
+      <motion.div 
+        layout 
+        onClick={() => setIsLightboxOpen(true)}
+        className={`relative overflow-hidden shrink-0 bg-[#0A0A0A] light-mode:!bg-gray-100 cursor-zoom-in ${viewType === 'list' ? 'w-[35%] aspect-square border-r border-white/5 light-mode:!border-black' : 'w-full aspect-[4/3] border-b border-white/5 light-mode:!border-black'}`}
+      >
         <img
           src={product.thumbnailUrl}
           alt={product.name}
           className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
         />
+        {/* Gallery Indicator Badge */}
+        {product.imageUrls.length > 1 && (
+          <div className="absolute top-2 right-2 bg-black/60 backdrop-blur-md text-white/70 text-[8px] px-1.5 py-0.5 rounded-md border border-white/10 font-bold flex items-center gap-1">
+            <ImageIcon size={8} />
+            {product.imageUrls.length}
+          </div>
+        )}
       </motion.div>
       <div className={`flex flex-col ${viewType === 'list' ? 'p-4 w-[65%] gap-2' : 'p-3 gap-2 flex-1'}`}>
         <div className="flex justify-between items-start gap-2">
           <motion.h3 layout className={`font-display font-bold tracking-tight line-clamp-2 ${viewType === 'list' ? 'text-base md:text-lg' : 'text-xs'}`}>
             {product.name}
           </motion.h3>
-          <motion.div layout className="shrink-0">
-            <div className="flex items-center gap-1">
+          <motion.span layout className="shrink-0">
+            <span className="flex items-center gap-1">
               <span className="font-mono text-base md:text-xl font-bold text-ag-accent">{product.price}</span>
               <span className="font-mono text-[8px] md:text-xs text-ag-accent">RON</span>
-            </div>
-          </motion.div>
+            </span>
+          </motion.span>
         </div>
         
         {viewType === 'list' && (
@@ -125,6 +138,11 @@ export default function MobileProductCard({ product, viewType = 'list' }: Props)
         onClose={() => setIsModalOpen(false)} 
         product={product} 
         waNumber={process.env.NEXT_PUBLIC_WA_NUMBER || '40765181199'} 
+      />
+      <ProductLightbox
+        isOpen={isLightboxOpen}
+        onClose={() => setIsLightboxOpen(false)}
+        images={product.imageUrls}
       />
     </motion.div>
   );

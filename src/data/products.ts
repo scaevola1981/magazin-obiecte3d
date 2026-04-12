@@ -14,6 +14,7 @@ export interface Product {
     downloads: number;
     likes: number;
   };
+  imageUrls: string[];
   category: string;
 }
 
@@ -52,6 +53,7 @@ interface DbProduct {
   tags?: string[] | null;
   likes?: number | null;
   orders?: number | null;
+  image_urls?: string[] | null;
 }
 
 export function mapDbToProduct(dbProduct: DbProduct): Product {
@@ -71,6 +73,9 @@ export function mapDbToProduct(dbProduct: DbProduct): Product {
       downloads: dbProduct.orders || 0,
       likes: dbProduct.likes || 0
     },
+    imageUrls: dbProduct.image_urls && dbProduct.image_urls.length > 0
+      ? dbProduct.image_urls.map(url => normalizeSupabaseUrl(url))
+      : [normalizeSupabaseUrl(dbProduct.thumbnail_url) || "/products/placeholder.jpg"],
     category: dbProduct.tags && dbProduct.tags.length > 0 ? dbProduct.tags[0] : "General"
   };
 }
