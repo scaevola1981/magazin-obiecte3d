@@ -27,8 +27,8 @@ export async function POST(req: NextRequest) {
     if (productId) payload.product_id = productId;
     if (customNotes) payload.custom_notes = customNotes;
     if (isCustomOrder) payload.is_custom_order = true;
-    if (customDescription) payload.custom_description = customDescription;
-    if (sketchUrl) payload.sketch_url = sketchUrl;
+    if (customDescription && customDescription !== 'NULL') payload.custom_description = customDescription;
+    if (sketchUrl && sketchUrl !== 'NULL') payload.sketch_url = sketchUrl;
 
     const { data: orderParams, error } = await supabase
       .from('orders')

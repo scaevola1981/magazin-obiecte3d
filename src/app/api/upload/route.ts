@@ -49,6 +49,7 @@ export async function POST(req: NextRequest) {
       .from('custom-sketches')
       .getPublicUrl(filename);
 
+    console.log('Generated Public URL:', urlData.publicUrl);
     return NextResponse.json({ url: urlData.publicUrl });
   } catch (error: any) {
     console.error('Upload API Error:', error);

@@ -59,13 +59,25 @@ export default function CustomOrderModal({ isOpen, onClose }: CustomOrderModalPr
       if (selectedFile) {
         const formData = new FormData();
         formData.append('file', selectedFile);
+        console.log('Starting image upload for:', selectedFile.name);
+        
         const uploadRes = await fetch('/api/upload', { method: 'POST', body: formData });
+        const uploadData = await uploadRes.json();
+
         if (uploadRes.ok) {
-          const uploadData = await uploadRes.json();
           sketchUrl = uploadData.url;
+          console.log('Image upload successful. URL:', sketchUrl);
+        } else {
+          console.error('Image upload failed:', uploadData.error);
+          throw new Error(uploadData.error || 'Eroare la încărcarea imaginii. Vă rugăm să încercați din nou.');
         }
-        // Don't block submission if upload fails - we'll note it in WhatsApp
       }
+
+      console.log('Submitting order with payload:', { 
+        name, 
+        isCustomOrder: true, 
+        sketchUrl 
+      });
 
       // Save to Supabase
       const res = await fetch('/api/orders', {

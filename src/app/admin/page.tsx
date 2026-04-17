@@ -26,7 +26,7 @@ export default function AdminPage() {
   const [status, setStatus] = useState<'idle' | 'uploading' | 'saving' | 'success' | 'error'>('idle');
   const [message, setMessage] = useState('');
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
-  const [adminTab, setAdminTab] = useState<'products' | 'orders'>('products');
+  const [adminTab, setAdminTab] = useState<'products' | 'orders' | 'history'>('products');
   const [isDragging, setIsDragging] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
@@ -177,14 +177,22 @@ export default function AdminPage() {
           </button>
           <button 
             onClick={() => setAdminTab('orders')}
-            className={`flex items-center gap-2 pb-4 text-sm font-bold border-b-2 transition-colors ${adminTab === 'orders' ? 'border-purple-500 text-white' : 'border-transparent text-white/50 hover:text-white/80'}`}
+            className={`flex-1 flex items-center justify-center gap-2 pb-4 text-xs font-bold border-b-2 transition-colors ${adminTab === 'orders' ? 'border-purple-500 text-white' : 'border-transparent text-white/50 hover:text-white/80'}`}
           >
-            <Package size={16} /> Comenzi
+            <Package size={14} /> Active
+          </button>
+          <button 
+            onClick={() => setAdminTab('history')}
+            className={`flex-1 flex items-center justify-center gap-2 pb-4 text-xs font-bold border-b-2 transition-colors ${adminTab === 'history' ? 'border-purple-500 text-white' : 'border-transparent text-white/50 hover:text-white/80'}`}
+          >
+            <CheckCircle size={14} /> Istoric
           </button>
         </div>
 
         {adminTab === 'orders' ? (
-          <AdminOrders />
+          <AdminOrders showCompletedOnly={false} />
+        ) : adminTab === 'history' ? (
+          <AdminOrders showCompletedOnly={true} />
         ) : (
         <form onSubmit={handleSubmit} className="flex flex-col gap-5">
           {/* Image Upload */}
