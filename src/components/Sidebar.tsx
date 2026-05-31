@@ -142,8 +142,8 @@ export default function Sidebar() {
             onClick={() => setIsCustomOrderOpen(true)}
             className="flex items-center gap-3 w-full px-4 py-3 rounded-xl text-sm font-medium text-fuchsia-500 light-mode:!text-fuchsia-600 hover:text-fuchsia-400 hover:bg-purple-500/20 light-mode:hover:!bg-purple-600/10 group transition-all"
           >
-            <div className="bg-purple-500/10 p-1.5 rounded-lg border border-purple-500/30 group-hover:bg-purple-500 group-hover:border-purple-500 transition-colors">
-              <MessageCircle size={16} className="text-purple-400 group-hover:text-white" />
+            <div className="bg-purple-500/10 p-1.5 rounded-lg border border-purple-500/30 group-hover:bg-purple-500 group-hover:border-purple-500 transition-colors text-purple-400 group-hover:text-white">
+              <MessageCircle size={16} />
             </div>
             <span className="transition-colors">Printare la comanda</span>
           </button>

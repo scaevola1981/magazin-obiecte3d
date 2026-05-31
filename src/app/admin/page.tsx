@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import { Upload, Plus, CheckCircle, XCircle, Loader2, Lock, Image as ImageIcon, ChevronDown, Package, ArrowLeft } from 'lucide-react';
+import { Upload, Plus, CheckCircle, XCircle, Loader2, Lock, Image as ImageIcon, ChevronDown, Package, ArrowLeft, FileCode, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 import AdminOrders from './AdminOrders';
 
@@ -28,7 +28,9 @@ export default function AdminPage() {
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const [adminTab, setAdminTab] = useState<'products' | 'orders' | 'history'>('products');
   const [isDragging, setIsDragging] = useState(false);
+  const [stlFile, setStlFile] = useState<File | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
+  const stlFileRef = useRef<HTMLInputElement>(null);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
@@ -82,6 +84,24 @@ export default function AdminPage() {
     setMessage('');
 
     const imageUrls: string[] = [];
+    let printFileUrl = '';
+
+    // Step 0: upload STL file if present
+    if (stlFile) {
+      setStatus('uploading');
+      setMessage('Se încarcă fișierul 3D...');
+      const fd = new FormData();
+      fd.append('password', password);
+      fd.append('file', stlFile);
+      const uploadRes = await fetch('/api/admin/upload', { method: 'POST', body: fd });
+      const uploadData = await uploadRes.json();
+      if (!uploadRes.ok) {
+        setStatus('error');
+        setMessage(uploadData.error || 'Upload fișier 3D eșuat');
+        return;
+      }
+      printFileUrl = uploadData.url;
+    }
 
     // Step 1: upload all images
     if (imageFiles.length > 0) {
@@ -107,7 +127,7 @@ export default function AdminPage() {
     const res = await fetch('/api/admin/product', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ password, name, description, price, category, thumbnailUrl, imageUrls }),
+      body: JSON.stringify({ password, name, description, price, category, thumbnailUrl, imageUrls, printFileUrl }),
     });
     const data = await res.json();
 
@@ -121,7 +141,9 @@ export default function AdminPage() {
     setMessage(`✅ Produs "${name}" adăugat cu succes!`);
     setName(''); setDescription(''); setPrice(''); setCategory('planter');
     setImageFiles([]); setImagePreviews([]);
+    setStlFile(null);
     if (fileRef.current) fileRef.current.value = '';
+    if (stlFileRef.current) stlFileRef.current.value = '';
   };
 
   if (!unlocked) {
@@ -238,6 +260,52 @@ export default function AdminPage() {
               accept="image/*"
               multiple
               onChange={handleImageChange}
+              className="hidden"
+            />
+          </div>
+
+          {/* STL File Upload */}
+          <div className="p-4 rounded-xl bg-white/5 border border-white/10 space-y-3">
+            <div className="flex items-center gap-2 mb-1">
+              <FileCode size={16} className="text-purple-400" />
+              <label className="text-white/50 text-[10px] uppercase tracking-widest font-bold block">Fișier 3D (.stl, .obj)</label>
+            </div>
+            
+            {stlFile ? (
+              <div className="flex items-center justify-between p-3 bg-purple-500/10 rounded-lg border border-purple-500/20">
+                <div className="flex items-center gap-3 overflow-hidden">
+                  <div className="w-8 h-8 rounded bg-purple-500/20 flex items-center justify-center shrink-0">
+                    <FileCode size={16} className="text-purple-400" />
+                  </div>
+                  <div className="overflow-hidden">
+                    <p className="text-xs font-bold text-white truncate">{stlFile.name}</p>
+                    <p className="text-[10px] text-white/40 uppercase font-bold">{(stlFile.size / 1024 / 1024).toFixed(2)} MB</p>
+                  </div>
+                </div>
+                <button 
+                  type="button" 
+                  onClick={() => setStlFile(null)}
+                  className="p-2 hover:bg-red-500/20 rounded-lg text-white/40 hover:text-red-400 transition-colors"
+                >
+                  <Trash2 size={16} />
+                </button>
+              </div>
+            ) : (
+              <div 
+                onClick={() => stlFileRef.current?.click()}
+                className="group p-6 rounded-xl border-2 border-dashed border-white/10 hover:border-purple-500/50 hover:bg-white/5 cursor-pointer transition-all flex flex-col items-center gap-2"
+              >
+                <Upload size={20} className="text-white/20 group-hover:text-purple-400 transition-colors" />
+                <p className="text-xs text-white/40 font-bold uppercase tracking-wider">Apasă pentru a încărca fișierul de print</p>
+                <p className="text-[10px] text-white/20 uppercase">Acceptăm .stl, .obj, .3mf</p>
+              </div>
+            )}
+            
+            <input
+              ref={stlFileRef}
+              type="file"
+              accept=".stl,.obj,.3mf"
+              onChange={(e) => setStlFile(e.target.files?.[0] || null)}
               className="hidden"
             />
           </div>

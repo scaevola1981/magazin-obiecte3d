@@ -3,6 +3,7 @@ export interface Product {
   name: string;
   price: string;
   modelUrl: string;
+  printFileUrl?: string;
   thumbnailUrl: string;
   description: string;
   creator: {
@@ -48,6 +49,7 @@ interface DbProduct {
   name?: string | null;
   price: string;
   model_url?: string | null;
+  print_file_url?: string | null;
   thumbnail_url?: string | null;
   description?: string | null;
   tags?: string[] | null;
@@ -62,6 +64,7 @@ export function mapDbToProduct(dbProduct: DbProduct): Product {
     name: (dbProduct.name || "").trim(),
     price: dbProduct.price,
     modelUrl: normalizeSupabaseUrl(dbProduct.model_url) || placeholderGlb,
+    printFileUrl: normalizeSupabaseUrl(dbProduct.print_file_url),
     thumbnailUrl: normalizeSupabaseUrl(dbProduct.thumbnail_url) || "/products/placeholder.jpg",
     description: dbProduct.description || "",
     creator: {

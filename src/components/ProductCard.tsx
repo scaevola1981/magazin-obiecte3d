@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ThumbsUp, Download, CheckCircle2, Box, Loader2, Image as ImageIcon } from 'lucide-react';
 import { Product } from '@/data/products';
-import OrderModal from './OrderModal';
+import CustomOrderModal from './CustomOrderModal';
 import ProductLightbox from './ProductLightbox';
 
 interface ProductCardProps {
@@ -108,6 +108,9 @@ export default function ProductCard({ product, index }: ProductCardProps) {
               {product.description}
             </p>
           )}
+          <p className="text-[9px] text-fuchsia-400/80 font-medium italic mt-1.5">
+            * Prețul poate varia în funcție de mărimea și greutatea printului
+          </p>
 
           <div className="flex items-center justify-between mt-3">
             {/* Creator Info */}
@@ -149,11 +152,11 @@ export default function ProductCard({ product, index }: ProductCardProps) {
           Comanda Acum
         </button>
       </div>
-      <OrderModal 
+      <CustomOrderModal 
         isOpen={isModalOpen} 
         onClose={() => setIsModalOpen(false)} 
-        product={product} 
-        waNumber="40770636284" 
+        prefillDescription={`Doresc produsul: ${product.name}`}
+        prefillImage={product.thumbnailUrl}
       />
       <ProductLightbox
         isOpen={isLightboxOpen}

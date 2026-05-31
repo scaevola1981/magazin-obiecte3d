@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ThumbsUp, Download, Loader2, Image as ImageIcon } from 'lucide-react';
 import { Product } from '@/data/products';
-import OrderModal from './OrderModal';
+import CustomOrderModal from './CustomOrderModal';
 import ProductLightbox from './ProductLightbox';
 
 interface Props {
@@ -96,6 +96,9 @@ export default function MobileProductCard({ product, viewType = 'list' }: Props)
             {product.description}
           </motion.p>
         )}
+        <motion.p layout className="text-[8px] md:text-[9px] text-fuchsia-400/80 font-medium italic -mt-1 mb-1">
+          * Prețul poate varia în funcție de mărimea și greutatea printului
+        </motion.p>
 
         {/* Stats Row */}
         <motion.div layout className="flex items-center gap-3 text-white/30 light-mode:!text-black text-xs md:text-sm light-mode:!font-black font-bold mt-auto pt-1">
@@ -133,11 +136,11 @@ export default function MobileProductCard({ product, viewType = 'list' }: Props)
         </button>
       )}
       
-      <OrderModal 
+      <CustomOrderModal 
         isOpen={isModalOpen} 
         onClose={() => setIsModalOpen(false)} 
-        product={product} 
-        waNumber={process.env.NEXT_PUBLIC_WA_NUMBER || '40765181199'} 
+        prefillDescription={`Doresc produsul: ${product.name}`}
+        prefillImage={product.thumbnailUrl}
       />
       <ProductLightbox
         isOpen={isLightboxOpen}

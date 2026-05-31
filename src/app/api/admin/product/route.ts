@@ -7,7 +7,7 @@ export async function POST(req: NextRequest) {
     process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!
   );
   const adminPassword = process.env.ADMIN_PASSWORD || 'printly2024';
-  const { password, name, description, price, category, thumbnailUrl, imageUrls } = await req.json();
+  const { password, name, description, price, category, thumbnailUrl, imageUrls, printFileUrl } = await req.json();
 
   if (password !== adminPassword) {
     return NextResponse.json({ error: 'Parolă incorectă' }, { status: 401 });
@@ -24,6 +24,7 @@ export async function POST(req: NextRequest) {
     thumbnail_url: thumbnailUrl || null,
     image_urls: imageUrls || (thumbnailUrl ? [thumbnailUrl] : []),
     model_url: null,
+    print_file_url: printFileUrl || null,
     tags: [category.toLowerCase()],
   }]).select().single();
 

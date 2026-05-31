@@ -118,12 +118,12 @@ export default function MobileNav() {
           <div className="flex-1 flex items-center gap-3 animate-in fade-in slide-in-from-bottom-2 duration-300">
              <Search size={18} className="text-primary shrink-0" />
              <input
-               autoFocus
-               type="text"
-               placeholder="Search blueprints..."
-               value={searchValue}
-               onChange={(e) => setSearchValue(e.target.value)}
-               className="flex-1 bg-transparent border-none text-sm text-white placeholder:text-white/40 focus:ring-0 outline-hidden h-full"
+                autoFocus
+                type="text"
+                placeholder="Search blueprints..."
+                value={searchValue}
+                onChange={(e) => setSearchValue(e.target.value)}
+                className="flex-1 bg-transparent border-none text-sm text-white placeholder:text-white/40 focus:ring-0 outline-hidden h-full"
              />
              <button
               onClick={() => {
